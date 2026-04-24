@@ -8,7 +8,7 @@ export function meta() {
 export default function LoginPage() {
   return (
     <div>
-      <div>Login</div>
+      <div>Test Login</div>
     </div>
   );
 }
