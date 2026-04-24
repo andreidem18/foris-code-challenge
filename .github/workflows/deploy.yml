@@ -31,13 +31,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run tests
+        run: pnpm test:run
+
       - name: Build React app
         run: pnpm run build
-
-      - name: Debug OIDC
-        run: |
-          echo "Repo: $GITHUB_REPOSITORY"
-          echo "Ref: $GITHUB_REF"
 
       # AWS Credentials
       - name: Configure AWS credentials
