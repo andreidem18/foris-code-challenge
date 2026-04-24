@@ -1,7 +1,0 @@
-@use "../styles/mixins" as m;
-@use "../styles/variables" as *;
-
-.main {
-  @include m.flex-center;
-  color: red;
-}
