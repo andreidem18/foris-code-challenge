@@ -1,5 +1,5 @@
 import { Navigate } from "react-router";
 
-export async function IndexPage() {
+export default function RedirectPage() {
   return <Navigate to="/login" />;
 }
