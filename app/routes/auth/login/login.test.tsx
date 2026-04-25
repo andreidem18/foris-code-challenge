@@ -15,7 +15,7 @@ describe("Tests login page", () => {
   it("Renders login page", () => {
     expect(
       screen.getByRole("button", {
-        name: /login/i,
+        name: "Login",
       }),
     ).toBeInTheDocument();
   });
