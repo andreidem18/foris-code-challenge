@@ -13,7 +13,10 @@ describe("Tests login page", () => {
   });
 
   it("Renders login page", () => {
-    const login = screen.getByText(/login/i);
-    expect(login).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: /login/i,
+      }),
+    ).toBeInTheDocument();
   });
 });
