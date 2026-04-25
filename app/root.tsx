@@ -1,3 +1,5 @@
+import "~/config/env";
+
 import {
   isRouteErrorResponse,
   Links,
