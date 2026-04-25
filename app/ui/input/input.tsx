@@ -34,6 +34,7 @@ export const Input = ({
           className={styles.hideIcon}
           onClick={onHide}
           aria-label={isHidden ? "show password" : "hide password"}
+          aria-pressed={!isHidden}
         >
           {isHidden ? <EyeOpenIcon /> : <EyeClosedIcon />}
         </button>
