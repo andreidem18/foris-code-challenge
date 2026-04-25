@@ -1,3 +1,5 @@
+import "~/config/env";
+
 import {
   isRouteErrorResponse,
   Links,
@@ -6,6 +8,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+
+import { Toaster } from "sonner";
 
 import type { Route } from "./+types/root";
 // import "./app.css";
@@ -37,6 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster richColors closeButton />
         <ScrollRestoration />
         <Scripts />
       </body>

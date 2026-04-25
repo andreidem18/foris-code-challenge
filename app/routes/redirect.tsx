@@ -1,5 +1,5 @@
 import { Navigate } from "react-router";
 
 export default function RedirectPage() {
-  return <Navigate to="/login" />;
+  return <Navigate to="/auth/login" />;
 }

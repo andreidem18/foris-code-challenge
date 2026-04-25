@@ -1,0 +1,26 @@
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.inputContainer .input {
+  width: 20rem;
+}
+
+.submitButton {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+}

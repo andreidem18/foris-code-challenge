@@ -1,4 +1,5 @@
 import { reactRouter } from "@react-router/dev/vite";
+import path from "path";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig(({ mode }) => ({
@@ -7,7 +8,9 @@ export default defineConfig(({ mode }) => ({
     mode !== "test" && reactRouter(),
   ].filter(Boolean),
   resolve: {
-    tsconfigPaths: true,
+    alias: {
+      "~": path.resolve(__dirname, "./app"),
+    },
   },
   test: {
     environment: "jsdom",
