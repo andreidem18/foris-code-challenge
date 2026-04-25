@@ -27,7 +27,7 @@ export function useRegisterForm() {
     try {
       await registerWithEmail(values);
       toast.success("Usuario creado exitosamente");
-      navigate("/login");
+      navigate("/auth/login");
     } catch (error) {
       const mapped = mapRegisterAuthError(error);
 
