@@ -5,15 +5,14 @@ import { Button } from "~/ui/button/button";
 
 export function meta() {
   return [
-    { title: "Login" },
-    { name: "description", content: "Login to Rick and Morty Memory App" },
+    { title: "Game" },
+    { name: "description", content: "Memory game" },
   ];
 }
 
 export default function GamePage() {
   // TODO: implement in a specific component to validate session
   const { user, loading } = useAuth();
-  console.log({ user });
 
   if (loading) {
     return <div>Loading...</div>; // o spinner
