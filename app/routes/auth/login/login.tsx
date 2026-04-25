@@ -5,6 +5,7 @@ import styles from "./login.module.scss";
 import { Link, useNavigate } from "react-router";
 import { Button } from "~/ui/button/button";
 import { loginWithGoogle } from "~/features/auth/services/loginWithGoogle";
+import { toast } from "sonner";
 
 export function meta() {
   return [
@@ -19,11 +20,11 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       await loginWithGoogle();
+      toast.success("Login exitoso");
       navigate("/game");
     } catch (error) {
       console.error(error);
-      // TODO: implement toasts
-      alert("There was an error");
+      toast.error("No se pudo iniciar sesi\u00f3n con Google");
     }
   };
 

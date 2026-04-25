@@ -8,6 +8,7 @@ import {
 import { loginWithEmail } from "../services/loginWithEmail";
 import { useNavigate } from "react-router";
 import { mapLoginAuthError } from "../utils/firebase-auth-error";
+import { toast } from "sonner";
 
 export function useLoginForm() {
   const form = useForm<LoginFormValues>({
@@ -25,7 +26,7 @@ export function useLoginForm() {
   const onValidSubmit = async (values: LoginFormValues) => {
     try {
       await loginWithEmail(values);
-      alert("Succesful login");
+      toast.success("Login exitoso");
       navigate("/game");
     } catch (error) {
       const mapped = mapLoginAuthError(error);
@@ -34,6 +35,9 @@ export function useLoginForm() {
         type: "server",
         message: mapped.message,
       });
+
+      // Also show the message as a toast for global visibility.
+      toast.error(mapped.message);
     }
   };
 

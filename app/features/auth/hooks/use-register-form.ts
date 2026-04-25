@@ -8,6 +8,7 @@ import {
 import { registerWithEmail } from "../services/registerWithEmail";
 import { useNavigate } from "react-router";
 import { mapRegisterAuthError } from "../utils/firebase-auth-error";
+import { toast } from "sonner";
 
 export function useRegisterForm() {
   const form = useForm<RegisterFormValues>({
@@ -25,7 +26,7 @@ export function useRegisterForm() {
   const onValidSubmit = async (values: RegisterFormValues) => {
     try {
       await registerWithEmail(values);
-      alert("User created successfully");
+      toast.success("Usuario creado exitosamente");
       navigate("/login");
     } catch (error) {
       const mapped = mapRegisterAuthError(error);
@@ -37,6 +38,8 @@ export function useRegisterForm() {
           message: mapped.message,
         },
       );
+
+      toast.error(mapped.message);
     }
   };
 
