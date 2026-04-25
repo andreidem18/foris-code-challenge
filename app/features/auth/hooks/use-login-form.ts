@@ -7,7 +7,7 @@ import {
 } from "~/features/auth/schemas/login-schema";
 import { loginWithEmail } from "../services/loginWithEmail";
 import { useNavigate } from "react-router";
-import { FirebaseError } from "firebase/app";
+import { mapLoginAuthError } from "../utils/firebase-auth-error";
 
 export function useLoginForm() {
   const form = useForm<LoginFormValues>({
@@ -28,15 +28,12 @@ export function useLoginForm() {
       alert("Succesful login");
       navigate("/game");
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        if (error.message.includes("auth/invalid-credential")) {
-          alert("Credenciales inválidas");
-        } else {
-          alert("Error");
-        }
-      } else {
-        alert("Error");
-      }
+      const mapped = mapLoginAuthError(error);
+
+      form.setError(mapped.field as "root" | "email" | "password", {
+        type: "server",
+        message: mapped.message,
+      });
     }
   };
 

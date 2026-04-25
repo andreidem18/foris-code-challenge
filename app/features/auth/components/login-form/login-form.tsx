@@ -45,6 +45,7 @@ export const LoginForm = () => {
         />
         <FormError id="password-error" message={errors.password?.message} />
       </div>
+      <FormError message={errors.root?.message} />
       <Button
         type="submit"
         disabled={isSubmitting}

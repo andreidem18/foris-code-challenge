@@ -7,7 +7,7 @@ import {
 } from "~/features/auth/schemas/register-schema";
 import { registerWithEmail } from "../services/registerWithEmail";
 import { useNavigate } from "react-router";
-import { FirebaseError } from "firebase/app";
+import { mapRegisterAuthError } from "../utils/firebase-auth-error";
 
 export function useRegisterForm() {
   const form = useForm<RegisterFormValues>({
@@ -28,13 +28,15 @@ export function useRegisterForm() {
       alert("User created successfully");
       navigate("/login");
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        if (error.message.includes("auth/email-already-in-use")) {
-          alert("Email ya está en uso");
-        }
-      } else {
-        alert("Error");
-      }
+      const mapped = mapRegisterAuthError(error);
+
+      form.setError(
+        mapped.field as "root" | "email" | "password" | "username",
+        {
+          type: "server",
+          message: mapped.message,
+        },
+      );
     }
   };
 
