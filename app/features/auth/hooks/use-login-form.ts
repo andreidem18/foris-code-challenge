@@ -22,7 +22,6 @@ export function useLoginForm() {
 
   const navigate = useNavigate();
 
-  // TODO: API call
   const onValidSubmit = async (values: LoginFormValues) => {
     try {
       await loginWithEmail(values);
@@ -36,7 +35,6 @@ export function useLoginForm() {
         message: mapped.message,
       });
 
-      // Also show the message as a toast for global visibility.
       toast.error(mapped.message);
     }
   };
