@@ -6,7 +6,7 @@ export default function AuthPage() {
   return (
     <div className={styles.loginLayout}>
       <div className={styles.loginContainer}>
-        <img src={logo} className={styles.logo} />
+        <img src={logo} className={styles.logo} alt="Rick and Morty Logo" />
         <Outlet />
       </div>
     </div>
