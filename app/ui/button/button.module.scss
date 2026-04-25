@@ -8,6 +8,11 @@
   font-weight: 600;
   border-radius: 0.25rem;
   letter-spacing: 0.05rem;
+
+  &:disabled {
+    cursor: auto;
+    opacity: 0.7;
+  }
 }
 
 .primary {
@@ -21,15 +26,24 @@
     background: v.$blue-3;
     color: v.$white;
   }
+  &:disabled {
+    background: v.$blue-1;
+    color: v.$dark-blue-1;
+  }
 }
 
 .secondary {
   background: v.$yellow-1;
+  box-shadow: -0.25rem 0.25rem v.$blue-1;
   &:hover {
     background: v.$yellow-2;
   }
   &:active {
     background: v.$yellow-3;
     color: v.$white;
+  }
+  &:disabled {
+    background: v.$blue-1;
+    color: v.$dark-blue-1;
   }
 }

@@ -13,3 +13,14 @@
 .inputContainer .input {
   width: 20rem;
 }
+
+.submitButton {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+}

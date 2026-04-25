@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "./login-form.module.scss";
 
 import { Button } from "~/ui/button/button";
-import { Input, Label } from "~/ui";
+import { Input, Label, Spinner } from "~/ui";
 import { FormError } from "~/ui/form-error/form-error";
 import { useLoginForm } from "~/features/auth/hooks/use-login-form";
 
@@ -18,16 +18,16 @@ export const LoginForm = () => {
   return (
     <form className={styles.loginForm} onSubmit={onSubmit} noValidate>
       <div className={styles.inputContainer}>
-        <Label htmlFor="username">Usuario</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
-          id="username"
+          id="email"
           className={styles.input}
-          autoComplete="username"
-          aria-invalid={errors.username ? true : undefined}
-          aria-describedby={errors.username ? "username-error" : undefined}
-          {...register("username")}
+          autoComplete="email"
+          aria-invalid={errors.email ? true : undefined}
+          aria-describedby={errors.email ? "email-error" : undefined}
+          {...register("email")}
         />
-        <FormError id="username-error" message={errors.username?.message} />
+        <FormError id="email-error" message={errors.email?.message} />
       </div>
       <div className={styles.inputContainer}>
         <Label htmlFor="password">Contraseña</Label>
@@ -45,7 +45,12 @@ export const LoginForm = () => {
         />
         <FormError id="password-error" message={errors.password?.message} />
       </div>
-      <Button type="submit" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className={styles.submitButton}
+      >
+        {isSubmitting && <Spinner className={styles.spinner} />}
         Login
       </Button>
     </form>

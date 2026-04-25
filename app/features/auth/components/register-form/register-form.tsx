@@ -3,7 +3,7 @@ import { useState } from "react";
 import styles from "./register-form.module.scss";
 
 import { Button } from "~/ui/button/button";
-import { Input, Label } from "~/ui";
+import { Input, Label, Spinner } from "~/ui";
 import { FormError } from "~/ui/form-error/form-error";
 import { useRegisterForm } from "../../hooks/use-register-form";
 
@@ -57,7 +57,12 @@ export const RegisterForm = () => {
         />
         <FormError id="password-error" message={errors.password?.message} />
       </div>
-      <Button type="submit" disabled={isSubmitting}>
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className={styles.submitButton}
+      >
+        {isSubmitting && <Spinner className={styles.spinner} />}
         Sign up
       </Button>
     </form>

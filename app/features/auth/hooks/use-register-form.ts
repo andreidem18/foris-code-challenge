@@ -5,6 +5,9 @@ import {
   type RegisterFormValues,
   registerSchema,
 } from "~/features/auth/schemas/register-schema";
+import { registerWithEmail } from "../services/registerWithEmail";
+import { useNavigate } from "react-router";
+import { FirebaseError } from "firebase/app";
 
 export function useRegisterForm() {
   const form = useForm<RegisterFormValues>({
@@ -17,9 +20,22 @@ export function useRegisterForm() {
     mode: "onSubmit",
   });
 
-  // TODO: API call
+  const navigate = useNavigate();
+
   const onValidSubmit = async (values: RegisterFormValues) => {
-    void values;
+    try {
+      await registerWithEmail(values);
+      alert("User created successfully");
+      navigate("/login");
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        if (error.message.includes("auth/email-already-in-use")) {
+          alert("Email ya está en uso");
+        }
+      } else {
+        alert("Error");
+      }
+    }
   };
 
   return {
