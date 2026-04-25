@@ -1,0 +1,27 @@
+@use "../../styles/mixins" as m;
+@use "../../styles/variables" as v;
+
+.loginLayout {
+  @include m.flex-center;
+  height: 100vh;
+}
+
+.loginContainer {
+  background: v.$background-2;
+  border-radius: 1rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.logo {
+  width: 15rem;
+}
+
+.link {
+  font-weight: 600;
+  color: v.$neutral-70;
+  text-decoration: none;
+}

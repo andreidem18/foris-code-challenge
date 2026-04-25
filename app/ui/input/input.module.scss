@@ -1,0 +1,37 @@
+@use "~/styles/variables" as v;
+@use "~/styles/mixins" as m;
+
+.input {
+  height: 2.4rem;
+  width: 15rem;
+  border: 0.125rem solid v.$neutral-90;
+  border-radius: 0.25rem;
+  position: relative;
+}
+
+.inputInternal {
+  @include m.overlay;
+  position: absolute;
+  border: 0;
+  font-size: 1rem;
+  background: transparent;
+  padding: 0.125rem 0.5rem;
+  padding: 0.125rem 0.5rem;
+  outline: 0;
+}
+.inputInternalWithButton {
+  right: 1.5rem;
+}
+
+.hideIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: transparent;
+  border: transparent;
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}

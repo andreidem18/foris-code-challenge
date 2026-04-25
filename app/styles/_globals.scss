@@ -4,6 +4,8 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  font-size: 1rem;
+  font-family: "Montserrat", system-ui, sans-serif;
 }
 
 body,
@@ -15,9 +17,11 @@ p {
 }
 
 body {
-  font-family: "Montserrat", system-ui, sans-serif;
   background-color: v.$background-1; // o el color del Figma
-  color: #fff;
+  color: v.$neutral-70;
   min-height: 100vh;
 }
 
+button {
+  cursor: pointer;
+}

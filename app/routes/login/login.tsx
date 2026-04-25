@@ -1,3 +1,9 @@
+import { logo } from "~/assets/images";
+import { LoginForm } from "~/features/login/components";
+
+import styles from "./login.module.scss";
+import { Link } from "react-router";
+
 export function meta() {
   return [
     { title: "Login" },
@@ -7,8 +13,14 @@ export function meta() {
 
 export default function LoginPage() {
   return (
-    <div>
-      <div>Test Login</div>
+    <div className={styles.loginLayout}>
+      <div className={styles.loginContainer}>
+        <img src={logo} className={styles.logo} />
+        <LoginForm />
+        <Link to="/signup" className={styles.link}>
+          ¿No tienes cuenta?
+        </Link>
+      </div>
     </div>
   );
 }

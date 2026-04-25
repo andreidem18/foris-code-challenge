@@ -1,0 +1,28 @@
+@use "~/styles/variables" as v;
+
+.button {
+  background: red;
+  box-shadow: -0.25rem 0.25rem;
+  border: none;
+  padding: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  letter-spacing: 0.05rem;
+}
+
+.primary {
+  background: v.$blue-1;
+  color: v.$dark-blue-1;
+  box-shadow: -0.25rem 0.25rem v.$yellow-1;
+  &:hover {
+    background: v.$blue-2;
+  }
+  &:active {
+    background: v.$blue-3;
+    color: v.$white;
+  }
+}
+
+.secondary {
+  background: v.$yellow-1;
+}
