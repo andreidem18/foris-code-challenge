@@ -1,5 +1,5 @@
 import { logo } from "~/assets/images";
-import { LoginForm } from "~/features/login/components";
+import { LoginForm } from "~/features/auth/components";
 
 import styles from "./login.module.scss";
 import { Link } from "react-router";

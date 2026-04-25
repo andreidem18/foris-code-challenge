@@ -5,7 +5,7 @@ import styles from "./login-form.module.scss";
 import { Button } from "~/ui/button/button";
 import { Input, Label } from "~/ui";
 import { FormError } from "~/ui/form-error/form-error";
-import { useLoginForm } from "~/features/login/hooks/use-login-form";
+import { useLoginForm } from "~/features/auth/hooks/use-login-form";
 
 export const LoginForm = () => {
   const [displayPassword, setDisplayPassword] = useState(false);

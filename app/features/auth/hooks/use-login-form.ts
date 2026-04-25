@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   type LoginFormValues,
   loginSchema,
-} from "~/features/login/schemas/login-schema";
+} from "~/features/auth/schemas/login-schema";
 
 export function useLoginForm() {
   const form = useForm<LoginFormValues>({
