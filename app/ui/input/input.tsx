@@ -29,7 +29,12 @@ export const Input = ({
         {...props}
       />
       {displayEye && (
-        <button type="button" className={styles.hideIcon} onClick={onHide}>
+        <button
+          type="button"
+          className={styles.hideIcon}
+          onClick={onHide}
+          aria-label={isHidden ? "show password" : "hide password"}
+        >
           {isHidden ? <EyeOpenIcon /> : <EyeClosedIcon />}
         </button>
       )}
