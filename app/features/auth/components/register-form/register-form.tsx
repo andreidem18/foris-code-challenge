@@ -46,7 +46,7 @@ export const RegisterForm = () => {
         <Input
           id="password"
           className={styles.input}
-          autoComplete="current-password"
+          autoComplete="new-password"
           displayEye
           isHidden={!displayPassword}
           type={displayPassword ? "text" : "password"}
