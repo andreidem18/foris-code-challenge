@@ -25,4 +25,11 @@
 
 .secondary {
   background: v.$yellow-1;
+  &:hover {
+    background: v.$yellow-2;
+  }
+  &:active {
+    background: v.$yellow-3;
+    color: v.$white;
+  }
 }

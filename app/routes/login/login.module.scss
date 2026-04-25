@@ -25,3 +25,14 @@
   color: v.$neutral-70;
   text-decoration: none;
 }
+
+.googleButton {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 1rem;
+  }
+}

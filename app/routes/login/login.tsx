@@ -1,8 +1,10 @@
-import { logo } from "~/assets/images";
+import { googleIcon, logo } from "~/assets/images";
 import { LoginForm } from "~/features/auth/components";
 
 import styles from "./login.module.scss";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { Button } from "~/ui/button/button";
+import { loginWithGoogle } from "~/features/auth/services/loginWithGoogle";
 
 export function meta() {
   return [
@@ -12,11 +14,32 @@ export function meta() {
 }
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      navigate("/game");
+    } catch (error) {
+      console.error(error);
+      // TODO: implement toasts
+      alert("There was an error");
+    }
+  };
+
   return (
     <div className={styles.loginLayout}>
       <div className={styles.loginContainer}>
         <img src={logo} className={styles.logo} />
         <LoginForm />
+        <Button
+          variant="secondary"
+          className={styles.googleButton}
+          onClick={handleLogin}
+        >
+          <img src={googleIcon} alt="google icon" />
+          Login con google
+        </Button>
         <Link to="/signup" className={styles.link}>
           ¿No tienes cuenta?
         </Link>
