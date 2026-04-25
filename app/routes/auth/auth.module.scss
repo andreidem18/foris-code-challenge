@@ -4,6 +4,7 @@
 .loginLayout {
   @include m.flex-center;
   height: 100vh;
+  height: 100dvh;
 }
 
 .loginContainer {
