@@ -19,7 +19,7 @@ export default function GamePage() {
     return <div>Loading...</div>; // o spinner
   }
 
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/auth/login" replace />;
 
   return (
     <div>

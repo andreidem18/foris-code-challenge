@@ -1,4 +1,4 @@
-import { googleIcon, logo } from "~/assets/images";
+import { googleIcon } from "~/assets/images";
 import { LoginForm } from "~/features/auth/components";
 
 import styles from "./login.module.scss";
@@ -28,22 +28,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={styles.loginLayout}>
-      <div className={styles.loginContainer}>
-        <img src={logo} className={styles.logo} />
-        <LoginForm />
-        <Button
-          variant="secondary"
-          className={styles.googleButton}
-          onClick={handleLogin}
-        >
-          <img src={googleIcon} alt="google icon" />
-          Login con google
-        </Button>
-        <Link to="/signup" className={styles.link}>
-          ¿No tienes cuenta?
-        </Link>
-      </div>
-    </div>
+    <>
+      <LoginForm />
+      <Button
+        variant="secondary"
+        className={styles.googleButton}
+        onClick={handleLogin}
+      >
+        <img src={googleIcon} alt="google icon" />
+        Login con google
+      </Button>
+      <Link to="/auth/register" className={styles.link}>
+        ¿No tienes cuenta?
+      </Link>
+    </>
   );
 }
