@@ -6,6 +6,8 @@ import { sleep } from "~/helpers";
 import { useTimedAction } from "./use-timed-action";
 import { resolveMatch, setupBoard, shuffle } from "../utils/gameUtils";
 import { usePersistedState } from "~/hooks/use-persisted-state";
+import { useNavigate } from "react-router";
+import type { GameResult } from "../types/game-result";
 
 export const useMemoryGame = () => {
   const {
@@ -18,6 +20,7 @@ export const useMemoryGame = () => {
   const [cards, setCards] = usePersistedState<Card[]>("gameBoard", []);
   const [gameStarted, setGameStarted] = useState(false);
   const [turns, setTurns] = useState(0);
+  const navigate = useNavigate();
 
   const { timedAction } = useTimedAction();
 
@@ -36,6 +39,16 @@ export const useMemoryGame = () => {
       hasInitialized.current = true;
     }
   }, [characters, setCards]);
+
+  // Check game end
+  useEffect(() => {
+    if (!cards.length) return;
+    const isFinished = cards.every((card) => card.status === "matched");
+    if (isFinished) {
+      navigate("/game/finish", { state: { turns } satisfies GameResult });
+      setCards([]);
+    }
+  }, [cards, navigate, setCards, turns]);
 
   const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({
     refetch,
@@ -85,9 +98,12 @@ export const useMemoryGame = () => {
 
     setTurns((t) => t + 1);
 
-    timedAction(1000, () =>
-      setCards((cards) => resolveMatch(cards, unflippedIds)),
-    );
+    timedAction(1000, () => {
+      setCards((cards) => {
+        const resolved = resolveMatch(cards, unflippedIds);
+        return resolved;
+      });
+    });
   };
 
   return {

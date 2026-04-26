@@ -7,7 +7,11 @@ import {
 
 export default [
   index("routes/redirect.tsx"),
-  route("/game", "./routes/game/game.tsx"),
+
+  layout("./routes/game/layout.tsx", [
+    route("/game", "./routes/game/(game)/game.tsx"),
+    route("/game/finish", "./routes/game/finish/finish.tsx"),
+  ]),
 
   layout("./routes/auth/auth.tsx", [
     route("/auth/login", "./routes/auth/login/login.tsx"),
