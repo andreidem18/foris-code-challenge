@@ -13,7 +13,7 @@ export const useMemoryGame = () => {
   const {
     data: characters,
     isRefetching,
-    isLoading,
+    isFetching,
     refetch,
   } = useFetchCharacters();
 
@@ -109,7 +109,7 @@ export const useMemoryGame = () => {
   return {
     handleReloadGame,
     isRefetchBlocked,
-    isLoading,
+    isFetching,
     cards,
     startGame,
     gameStarted,
