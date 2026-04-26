@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { sleep } from "~/helpers";
 
 // Function to have only a timeout at a time. If another is activated, it
-// cancels the previous one and executes the callback immediatly
+// cancels the previous one and executes the callback immediately
 export const useTimedAction = () => {
-  const controllerRef = useRef<AbortController>(null);
+  const controllerRef = useRef<AbortController | null>(null);
 
   const timedAction = async (time: number, callback: () => void) => {
     if (controllerRef.current) controllerRef.current.abort();
@@ -21,6 +21,12 @@ export const useTimedAction = () => {
       controllerRef.current = null;
     }
   };
+
+  useEffect(() => {
+    return () => {
+      controllerRef.current?.abort();
+    };
+  }, []);
 
   return { timedAction };
 };

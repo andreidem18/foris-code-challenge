@@ -1,9 +1,23 @@
 export const sleep = (time: number, signal?: AbortSignal) =>
   new Promise((resolve, reject) => {
-    const timeout = setTimeout(resolve, time);
-
-    signal?.addEventListener("abort", () => {
-      clearTimeout(timeout);
+    if (signal?.aborted) {
       reject(new Error("Aborted"));
-    });
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      cleanup();
+      resolve(undefined);
+    }, time);
+
+    const cleanup = () => {
+      clearTimeout(timeout);
+      signal?.removeEventListener("abort", onAbort);
+    };
+    const onAbort = () => {
+      cleanup();
+      reject(new Error("Aborted"));
+    };
+
+    signal?.addEventListener("abort", onAbort, { once: true });
   });
