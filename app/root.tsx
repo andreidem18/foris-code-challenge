@@ -16,6 +16,7 @@ import type { Route } from "./+types/root";
 import "./styles/_globals.scss";
 import "./styles/_mixins.scss";
 import "./styles/_variables.scss";
+import { ReactQueryClientProvider } from "./config/queryClient";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -40,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         <Toaster richColors closeButton />
         <ScrollRestoration />
         <Scripts />

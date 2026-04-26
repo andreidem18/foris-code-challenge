@@ -1,13 +1,12 @@
 @use "~/styles/variables" as v;
 
 .button {
-  background: red;
-  box-shadow: -0.25rem 0.25rem;
   border: none;
   padding: 0.5rem;
   font-weight: 600;
   border-radius: 0.25rem;
   letter-spacing: 0.05rem;
+  transition: 0.2s;
 
   &:disabled {
     cursor: auto;
@@ -40,6 +39,22 @@
   }
   &:active {
     background: v.$yellow-3;
+    color: v.$white;
+  }
+  &:disabled {
+    background: v.$blue-1;
+    color: v.$dark-blue-1;
+  }
+}
+
+.outline {
+  background: transparent;
+  border: solid 0.25rem v.$blue-1;
+  &:hover {
+    background: v.$blue-1;
+  }
+  &:active {
+    background: v.$blue-2;
     color: v.$white;
   }
   &:disabled {

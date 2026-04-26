@@ -3,7 +3,7 @@ import clsx from "clsx";
 import styles from "./button.module.scss";
 
 interface Props extends React.ComponentProps<"button"> {
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "outline";
 }
 
 function Button({ className, variant = "primary", ...props }: Props) {

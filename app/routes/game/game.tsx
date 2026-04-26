@@ -3,7 +3,7 @@ import { useAuth } from "~/features/auth/hooks/use-auth";
 
 import styles from "./game.module.scss";
 import { logo } from "~/assets/images";
-import { Button } from "~/ui/button/button";
+import { MemoryGame } from "~/features/game/components/memory-game/memory-game";
 
 export function meta() {
   return [{ title: "Game" }, { name: "description", content: "Memory game" }];
@@ -12,7 +12,6 @@ export function meta() {
 export default function GamePage() {
   // TODO: implement in a specific component to validate session
   const { user, loading } = useAuth();
-  console.log({ user });
 
   if (!loading && !user) return <Navigate to="/auth/login" replace />;
 
@@ -23,10 +22,7 @@ export default function GamePage() {
           <img src={logo} alt="Rick and Morty logo" className={styles.logo} />
           <div className={styles.gameTitle}>Juego de memoria</div>
           <div className={styles.gameContainer}>
-            <div className={styles.gameHeader}>
-              <h3>Personajes</h3>
-              <Button>Jugar</Button>
-            </div>
+            <MemoryGame />
           </div>
         </div>
       </div>
