@@ -41,6 +41,7 @@ jobs:
           VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
           VITE_FIREBASE_PROJECT_ID: ${{ vars.VITE_FIREBASE_PROJECT_ID }}
           VITE_FIREBASE_APP_ID: ${{ vars.VITE_FIREBASE_APP_ID }}
+          VITE_RICK_MORTY_GRAPHQL_URL: ${{ vars.VITE_RICK_MORTY_GRAPHQL_URL }}
 
       # AWS Credentials
       - name: Configure AWS credentials
