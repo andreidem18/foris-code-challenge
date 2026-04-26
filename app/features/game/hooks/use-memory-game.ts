@@ -38,6 +38,14 @@ export const useMemoryGame = () => {
     isRefetching,
   });
 
+  const handleReloadGame = async () => {
+    const result = await triggerRefetch();
+
+    if (result?.data) {
+      setCards(setupBoard(result.data));
+    }
+  };
+
   const shuffleCards = async () => {
     for (let i = 0; i < 4; i++) {
       setCards((prev) => shuffle(prev));
@@ -48,11 +56,12 @@ export const useMemoryGame = () => {
   const startGame = async () => {
     setGameStarted(true);
     setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
-    await sleep(700);
+    await sleep(300);
     shuffleCards();
   };
 
   const flipCard = async (card: Card) => {
+    if (!gameStarted || !(card.status === "flipped")) return;
     const currentCards = cards.map((c): Card => {
       if (c.id === card.id) {
         return { ...c, status: "unflipped" };
@@ -63,40 +72,51 @@ export const useMemoryGame = () => {
     checkMatch(currentCards);
   };
 
+  const timerControllerRef = useRef<AbortController>(null);
+
   const checkMatch = async (currentCards: Card[]) => {
-    const unflipped = currentCards.filter(
-      (card) => card.status === "unflipped",
-    );
-    if (unflipped.length < 2) return;
-    setTurns(turns + 1);
-    await sleep(1000);
-    if (unflipped[0].characterId === unflipped[1].characterId) {
+    const unflippedIds = currentCards
+      .filter((card) => card.status === "unflipped")
+      .map((card) => card.characterId);
+
+    // If is displaying the cards (timer active), cancel it
+    if (timerControllerRef.current) timerControllerRef.current.abort();
+
+    if (unflippedIds.length !== 2) return;
+
+    setTurns((t) => t + 1);
+
+    const controller = new AbortController();
+    timerControllerRef.current = controller;
+
+    try {
+      await sleep(1000, controller.signal);
+      resolveMatch(unflippedIds);
+    } catch {
+      // UX: Resolve immediate if cancel (if the user clic another card while the timer is active)
+      resolveMatch(unflippedIds);
+    } finally {
+      timerControllerRef.current = null;
+    }
+  };
+
+  const resolveMatch = (unflippedIds: string[]) => {
+    // Match
+    if (unflippedIds[0] === unflippedIds[1]) {
       setCards((prev) =>
-        prev.map((c) => {
-          if (c.characterId === unflipped[0].characterId) {
-            return { ...c, status: "matched" };
-          }
-          return c;
-        }),
+        prev.map((c) =>
+          c.characterId === unflippedIds[0] ? { ...c, status: "matched" } : c,
+        ),
       );
       return;
     }
+
+    // No match
     setCards((prev) =>
-      prev.map((c) => {
-        if (c.status === "unflipped") {
-          return { ...c, status: "flipped" };
-        }
-        return c;
-      }),
+      prev.map((c) =>
+        unflippedIds.includes(c.characterId) ? { ...c, status: "flipped" } : c,
+      ),
     );
-  };
-
-  const handleReloadGame = async () => {
-    const result = await triggerRefetch();
-
-    if (result?.data) {
-      setCards(setupBoard(result.data));
-    }
   };
 
   return {
