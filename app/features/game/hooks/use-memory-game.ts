@@ -5,6 +5,7 @@ import { type Card } from "../types/card";
 import { sleep } from "~/helpers";
 import { useTimedAction } from "./use-timed-action";
 import { resolveMatch, setupBoard, shuffle } from "../utils/gameUtils";
+import { usePersistedState } from "~/hooks/use-persisted-state";
 
 export const useMemoryGame = () => {
   const {
@@ -14,7 +15,7 @@ export const useMemoryGame = () => {
     refetch,
   } = useFetchCharacters();
 
-  const [cards, setCards] = useState<Card[]>([]);
+  const [cards, setCards] = usePersistedState<Card[]>("gameBoard", []);
   const [gameStarted, setGameStarted] = useState(false);
   const [turns, setTurns] = useState(0);
 
