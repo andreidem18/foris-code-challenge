@@ -21,8 +21,15 @@ body {
   color: v.$neutral-70;
   min-height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 button {
   cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
