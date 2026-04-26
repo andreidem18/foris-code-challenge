@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useFetchCharacters } from "./use-fetch-characters";
 import { useRefetchCooldown } from "./use-refetch-cooldown";
 import { type Card } from "../types/card";
-import type { Character } from "../types/character";
 import { sleep } from "~/helpers";
+import { useTimedAction } from "./use-timed-action";
+import { resolveMatch, setupBoard, shuffle } from "../utils/gameUtils";
+import { usePersistedState } from "~/hooks/use-persisted-state";
 
 export const useMemoryGame = () => {
   const {
@@ -13,9 +15,11 @@ export const useMemoryGame = () => {
     refetch,
   } = useFetchCharacters();
 
-  const [cards, setCards] = useState<Card[]>([]);
+  const [cards, setCards] = usePersistedState<Card[]>("gameBoard", []);
   const [gameStarted, setGameStarted] = useState(false);
   const [turns, setTurns] = useState(0);
+
+  const { timedAction } = useTimedAction();
 
   const getMatches = () => {
     const cardsMatched = cards.filter(
@@ -31,12 +35,20 @@ export const useMemoryGame = () => {
       setCards(setupBoard(characters));
       hasInitialized.current = true;
     }
-  }, [characters]);
+  }, [characters, setCards]);
 
   const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({
     refetch,
     isRefetching,
   });
+
+  const handleReloadGame = async () => {
+    const result = await triggerRefetch();
+
+    if (result?.data) {
+      setCards(setupBoard(result.data));
+    }
+  };
 
   const shuffleCards = async () => {
     for (let i = 0; i < 4; i++) {
@@ -48,11 +60,12 @@ export const useMemoryGame = () => {
   const startGame = async () => {
     setGameStarted(true);
     setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
-    await sleep(700);
+    await sleep(300);
     shuffleCards();
   };
 
   const flipCard = async (card: Card) => {
+    if (!gameStarted || !(card.status === "flipped")) return;
     const currentCards = cards.map((c): Card => {
       if (c.id === card.id) {
         return { ...c, status: "unflipped" };
@@ -64,39 +77,17 @@ export const useMemoryGame = () => {
   };
 
   const checkMatch = async (currentCards: Card[]) => {
-    const unflipped = currentCards.filter(
-      (card) => card.status === "unflipped",
-    );
-    if (unflipped.length < 2) return;
-    setTurns(turns + 1);
-    await sleep(1000);
-    if (unflipped[0].characterId === unflipped[1].characterId) {
-      setCards((prev) =>
-        prev.map((c) => {
-          if (c.characterId === unflipped[0].characterId) {
-            return { ...c, status: "matched" };
-          }
-          return c;
-        }),
-      );
-      return;
-    }
-    setCards((prev) =>
-      prev.map((c) => {
-        if (c.status === "unflipped") {
-          return { ...c, status: "flipped" };
-        }
-        return c;
-      }),
-    );
-  };
+    const unflippedIds = currentCards
+      .filter((card) => card.status === "unflipped")
+      .map((card) => card.characterId);
 
-  const handleReloadGame = async () => {
-    const result = await triggerRefetch();
+    if (unflippedIds.length !== 2) return;
 
-    if (result?.data) {
-      setCards(setupBoard(result.data));
-    }
+    setTurns((t) => t + 1);
+
+    timedAction(1000, () =>
+      setCards((cards) => resolveMatch(cards, unflippedIds)),
+    );
   };
 
   return {
@@ -110,27 +101,4 @@ export const useMemoryGame = () => {
     getMatches,
     turns,
   };
-};
-
-const setupBoard = (characters: Character[]): Card[] => {
-  const duplicated = characters.flatMap((c) => [c, c]);
-
-  return duplicated.map((character, i) => ({
-    character,
-    characterId: character.id,
-    id: `${character.id} - ${i}`,
-    status: "unflipped",
-  }));
-};
-
-const shuffle = (cards: Card[]) => {
-  const result = [...cards]; // no mutar el original
-
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-
-  return result;
 };
