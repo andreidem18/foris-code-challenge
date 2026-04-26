@@ -3,7 +3,7 @@ import { useFetchCharacters } from "./use-fetch-characters";
 import { useRefetchCooldown } from "./use-refetch-cooldown";
 import { type Card } from "../types/card";
 import { sleep } from "~/helpers";
-import { useTimedAction } from "./use-timed-action";
+import { useSafeTimer } from "./use-safe-timer";
 import { resolveMatch, setupBoard, shuffle } from "../utils/gameUtils";
 import { usePersistedState } from "~/hooks/use-persisted-state";
 import { useNavigate } from "react-router";
@@ -22,7 +22,7 @@ export const useMemoryGame = () => {
   const [turns, setTurns] = useState(0);
   const navigate = useNavigate();
 
-  const { timedAction } = useTimedAction();
+  const { safeTimer, safeTimerRef } = useSafeTimer();
 
   const getMatches = () => {
     const cardsMatched = cards.filter(
@@ -94,16 +94,15 @@ export const useMemoryGame = () => {
       .filter((card) => card.status === "unflipped")
       .map((card) => card.characterId);
 
+    if (safeTimerRef.current) safeTimerRef.current.abort();
+
     if (unflippedIds.length !== 2) return;
 
     setTurns((t) => t + 1);
 
-    timedAction(1000, () => {
-      setCards((cards) => {
-        const resolved = resolveMatch(cards, unflippedIds);
-        return resolved;
-      });
-    });
+    safeTimer(() => {
+      setCards((cards) => resolveMatch(cards, unflippedIds));
+    }, 1000);
   };
 
   return {

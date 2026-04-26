@@ -3,14 +3,15 @@ import { sleep } from "~/helpers";
 
 // Function to have only a timeout at a time. If another is activated, it
 // cancels the previous one and executes the callback immediately
-export const useTimedAction = () => {
-  const controllerRef = useRef<AbortController | null>(null);
+export const useSafeTimer = () => {
+  const safeTimerRef = useRef<AbortController | null>(null);
 
-  const timedAction = async (time: number, callback: () => void) => {
-    if (controllerRef.current) controllerRef.current.abort();
+  const safeTimer = async (callback: () => void, time: number) => {
+    console.log({ "safeTimerRef.current": safeTimerRef.current });
+    if (safeTimerRef.current) safeTimerRef.current.abort();
 
     const controller = new AbortController();
-    controllerRef.current = controller;
+    safeTimerRef.current = controller;
 
     try {
       await sleep(time, controller.signal);
@@ -18,15 +19,15 @@ export const useTimedAction = () => {
     } catch {
       callback();
     } finally {
-      controllerRef.current = null;
+      safeTimerRef.current = null;
     }
   };
 
   useEffect(() => {
     return () => {
-      controllerRef.current?.abort();
+      safeTimerRef.current?.abort();
     };
   }, []);
 
-  return { timedAction };
+  return { safeTimer, safeTimerRef };
 };
