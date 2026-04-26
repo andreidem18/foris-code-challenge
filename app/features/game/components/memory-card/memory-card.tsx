@@ -1,5 +1,5 @@
 import { Image } from "~/ui";
-import type { Character } from "../../types/Character";
+import type { Character } from "../../types/character";
 
 import styles from "./memory-card.module.scss";
 

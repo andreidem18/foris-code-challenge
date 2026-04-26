@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { graphqlClient } from "../services/graphqlClient";
+import { graphqlClient } from "../services/graphql-client";
 import { GET_CHARACTERS } from "../services/queries";
-import { type CharacterReponse } from "../types/Character";
+import { type CharacterReponse } from "../types/character";
 
 export const useFetchCharacters = () => {
   return useQuery({
