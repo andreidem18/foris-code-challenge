@@ -52,8 +52,13 @@ jobs:
 
       - run: aws s3 sync ./build/client s3://rick-morty-game --delete
 
-      # TODO: Use this when cloudfront is available
-      # - run: |
-      #     aws cloudfront create-invalidation \
-      #       --distribution-id E5S7U06YXPCS9 \
-      #       --paths "/*"
+      - name: Assume role for CloudFront (Account B)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::938595409159:role/foris-code-challenge-role
+          aws-region: us-east-1
+
+      - run: |
+          aws cloudfront create-invalidation \
+            --distribution-id EV4PCQR7T6KYL \
+            --paths "/*"
