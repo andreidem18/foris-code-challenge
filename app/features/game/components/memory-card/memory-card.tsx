@@ -1,23 +1,24 @@
 import { Image } from "~/ui";
-import type { Character } from "../../types/character";
 
 import styles from "./memory-card.module.scss";
-import { useState } from "react";
 import clsx from "clsx";
 import { rickMortyVortex } from "~/assets/images";
+import type { Card } from "../../types/card";
 
 interface Props {
-  character: Character;
+  card: Card;
+  flipCard: (card: Card) => void;
 }
 
-export const MemoryCard = ({ character }: Props) => {
-  const [isFlipped, setIsFlipped] = useState(false);
+export const MemoryCard = ({ card, flipCard }: Props) => {
+  const { character } = card;
+  const isFlipped = card.status === "flipped";
 
   return (
     <>
       <div
         className={clsx(styles.card, isFlipped && styles.flipped)}
-        onClick={() => setIsFlipped(!isFlipped)}
+        onClick={() => flipCard(card)}
         role="button"
       >
         <div className={styles.cardInner}>

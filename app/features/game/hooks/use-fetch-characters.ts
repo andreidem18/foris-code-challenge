@@ -16,11 +16,12 @@ export const useFetchCharacters = () => {
       return data.charactersByIds;
     },
     placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
   });
 };
 
 const getRandomIds = () => {
-  const maxIds = 12;
+  const maxIds = 6;
   const range = { min: 1, max: 826 };
 
   const result: number[] = [];
