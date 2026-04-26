@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const MemoryCard = ({ character }: Props) => {
-  const [isFlipped, setIsFlipped] = useState(true);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   return (
     <>
@@ -25,7 +25,6 @@ export const MemoryCard = ({ character }: Props) => {
               src={character.image}
               alt={`${character.name} image`}
               className={styles.characterImage}
-              height={160}
             />
             <div className={styles.characterName}>{character.name}</div>
             <div className={styles.characterDescription}>

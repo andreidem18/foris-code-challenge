@@ -7,9 +7,10 @@ import styles from "./image.module.scss";
 interface Props extends React.ComponentProps<"image"> {
   src: string;
   alt: string;
-  height: number;
+  height?: number;
   skeletonClassName?: string;
   errorFallback?: string;
+  imageClassName?: string;
 }
 
 export function Image({
@@ -19,6 +20,7 @@ export function Image({
   skeletonClassName,
   errorFallback = "Error al cargar imagen",
   height,
+  imageClassName,
 }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -35,9 +37,13 @@ export function Image({
         <img
           src={src}
           alt={alt}
-          className={clsx(styles.image, {
-            [styles.hidden]: loading,
-          })}
+          className={clsx(
+            styles.image,
+            {
+              [styles.hidden]: loading,
+            },
+            imageClassName,
+          )}
           onLoad={() => setLoading(false)}
           onError={() => {
             setLoading(false);
