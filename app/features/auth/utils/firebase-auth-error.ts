@@ -19,7 +19,7 @@ export function mapLoginAuthError(
       return { field: "email", message: "El email es inválido" };
     case "auth/invalid-credential":
       // Avoid revealing which field is wrong.
-      return { field: "root", message: "Email o contrase+a incorrectos" };
+      return { field: "root", message: "Email o contraseña incorrectos" };
     case "auth/user-disabled":
       return { field: "root", message: "Este usuario está deshabilitado" };
     case "auth/too-many-requests":
