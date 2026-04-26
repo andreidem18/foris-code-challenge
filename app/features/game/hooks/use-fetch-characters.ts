@@ -1,13 +1,13 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { graphqlClient } from "../services/graphql-client";
 import { GET_CHARACTERS } from "../services/queries";
-import { type CharacterReponse } from "../types/character";
+import { type CharacterResponse } from "../types/character";
 
 export const useFetchCharacters = () => {
   return useQuery({
     queryKey: ["characters"],
     queryFn: async () => {
-      const data = await graphqlClient.request<CharacterReponse>(
+      const data = await graphqlClient.request<CharacterResponse>(
         GET_CHARACTERS,
         {
           ids: getRandomIds(),

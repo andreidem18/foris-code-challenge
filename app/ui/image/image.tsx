@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Skeleton } from "../skeleton/skeleton";
 import styles from "./image.module.scss";
 
-interface Props extends React.ComponentProps<"image"> {
+interface Props extends React.ComponentProps<"img"> {
   src: string;
   alt: string;
   height?: number;
@@ -21,6 +21,7 @@ export function Image({
   errorFallback = "Error al cargar imagen",
   height,
   imageClassName,
+  ...props
 }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -49,6 +50,7 @@ export function Image({
             setLoading(false);
             setError(true);
           }}
+          {...props}
         />
       )}
 

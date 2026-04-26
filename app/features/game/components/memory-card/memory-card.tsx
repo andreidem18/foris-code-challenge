@@ -18,6 +18,7 @@ export const MemoryCard = ({ character }: Props) => {
       <div
         className={clsx(styles.card, isFlipped && styles.flipped)}
         onClick={() => setIsFlipped(!isFlipped)}
+        role="button"
       >
         <div className={styles.cardInner}>
           <div className={clsx(styles.cardFace, styles.cardFront)}>

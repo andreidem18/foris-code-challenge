@@ -28,7 +28,9 @@ export default function GamePage() {
       </div>
       {/* TODO: Create a good button to handle the session */}
       <button className={styles.sessionButton}>
-        {user?.photoURL && <img src={user?.photoURL} />}
+        {user?.photoURL && (
+          <img src={user?.photoURL} alt={user.displayName || ""} />
+        )}
       </button>
     </>
   );

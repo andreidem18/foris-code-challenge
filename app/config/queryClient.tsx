@@ -6,8 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-const onError = (error: unknown) => {
-  console.log(error);
+const onError = () => {
   toast.error("Hubo un error inesperado");
 };
 
