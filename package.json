@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "test": "vitest",
     "test:run": "vitest run",
+    "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
     "tsm": "typed-scss-modules app --aliasPrefixes.~/ ./app/ --watch"
   },

@@ -7,11 +7,12 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { useMemoryGame } from "../../hooks/use-memory-game";
 
 import styles from "./memory-game.module.scss";
+import { CardGridSkeleton } from "../card-grid-skeleton/card-grid-skeleton";
 
 export const MemoryGame = () => {
   const {
     isRefetchBlocked,
-    isLoading,
+    isFetching,
     handleReloadGame,
     cards,
     startGame,
@@ -20,9 +21,6 @@ export const MemoryGame = () => {
     getMatches,
     turns,
   } = useMemoryGame();
-
-  // TODO: improve loading state
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <>
@@ -41,6 +39,7 @@ export const MemoryGame = () => {
                 disabled={isRefetchBlocked}
                 className={styles.refetchButton}
                 variant="outline"
+                aria-label={"Traer otros personajes"}
               >
                 {isRefetchBlocked ? <Spinner /> : <ReloadIcon />}
               </Button>
@@ -52,11 +51,15 @@ export const MemoryGame = () => {
         )}
       </div>
       <ul className={styles.cardList}>
-        {cards.map((card) => (
-          <motion.li key={card.id} layout transition={{ duration: 0.5 }}>
-            <MemoryCard card={card} flipCard={flipCard} />
-          </motion.li>
-        ))}
+        {isFetching ? (
+          <CardGridSkeleton />
+        ) : (
+          cards.map((card) => (
+            <motion.li key={card.id} layout transition={{ duration: 0.5 }}>
+              <MemoryCard card={card} flipCard={flipCard} />
+            </motion.li>
+          ))
+        )}
       </ul>
     </>
   );

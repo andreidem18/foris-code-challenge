@@ -3,23 +3,27 @@ import { useFetchCharacters } from "./use-fetch-characters";
 import { useRefetchCooldown } from "./use-refetch-cooldown";
 import { type Card } from "../types/card";
 import { sleep } from "~/helpers";
-import { useTimedAction } from "./use-timed-action";
-import { resolveMatch, setupBoard, shuffle } from "../utils/gameUtils";
+import { useSafeTimer } from "./use-safe-timer";
+import { resolveMatch, setupBoard, shuffle } from "../utils/game-utils";
 import { usePersistedState } from "~/hooks/use-persisted-state";
+import { useNavigate } from "react-router";
+import type { GameResult } from "../types/game-result";
+import { gameSession } from "../utils/game-session";
 
 export const useMemoryGame = () => {
   const {
     data: characters,
     isRefetching,
-    isLoading,
+    isFetching,
     refetch,
   } = useFetchCharacters();
 
   const [cards, setCards] = usePersistedState<Card[]>("gameBoard", []);
   const [gameStarted, setGameStarted] = useState(false);
   const [turns, setTurns] = useState(0);
+  const navigate = useNavigate();
 
-  const { timedAction } = useTimedAction();
+  const { safeTimer, safeTimerRef } = useSafeTimer();
 
   const getMatches = () => {
     const cardsMatched = cards.filter(
@@ -32,10 +36,22 @@ export const useMemoryGame = () => {
 
   useEffect(() => {
     if (characters && !hasInitialized.current) {
+      gameSession.reset();
       setCards(setupBoard(characters));
       hasInitialized.current = true;
     }
   }, [characters, setCards]);
+
+  // Check game end
+  useEffect(() => {
+    if (!cards.length) return;
+    const isFinished = cards.every((card) => card.status === "matched");
+    if (isFinished) {
+      gameSession.finish();
+      navigate("/game/finish", { state: { turns } satisfies GameResult });
+      setCards([]);
+    }
+  }, [cards, navigate, setCards, turns]);
 
   const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({
     refetch,
@@ -66,6 +82,7 @@ export const useMemoryGame = () => {
 
   const flipCard = async (card: Card) => {
     if (!gameStarted || !(card.status === "flipped")) return;
+    if (safeTimerRef.current) safeTimerRef.current.abort();
     const currentCards = cards.map((c): Card => {
       if (c.id === card.id) {
         return { ...c, status: "unflipped" };
@@ -77,23 +94,23 @@ export const useMemoryGame = () => {
   };
 
   const checkMatch = async (currentCards: Card[]) => {
-    const unflippedIds = currentCards
-      .filter((card) => card.status === "unflipped")
-      .map((card) => card.characterId);
+    const unflipped = currentCards.filter(
+      (card) => card.status === "unflipped",
+    );
 
-    if (unflippedIds.length !== 2) return;
+    if (unflipped.length !== 2) return;
 
     setTurns((t) => t + 1);
 
-    timedAction(1000, () =>
-      setCards((cards) => resolveMatch(cards, unflippedIds)),
-    );
+    safeTimer(() => {
+      setCards((cards) => resolveMatch(cards, unflipped));
+    }, 1000);
   };
 
   return {
     handleReloadGame,
     isRefetchBlocked,
-    isLoading,
+    isFetching,
     cards,
     startGame,
     gameStarted,

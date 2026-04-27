@@ -1,0 +1,28 @@
+.finishPageContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 3rem;
+}
+
+.finishPageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.description {
+  font-weight: 600;
+}
+
+.buttons {
+  display: flex;
+  gap: 2rem;
+  button {
+    width: 13rem;
+  }
+}

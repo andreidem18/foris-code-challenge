@@ -24,16 +24,18 @@ export const shuffle = (cards: Card[]): Card[] => {
   return result;
 };
 
-export const resolveMatch = (cards: Card[], ids: string[]): Card[] => {
+export const resolveMatch = (cards: Card[], unflipped: Card[]): Card[] => {
+  const characterIds = unflipped.map((card) => card.characterId);
+  const cardIds = unflipped.map((card) => card.id);
   // Match
-  if (ids[0] === ids[1]) {
+  if (characterIds[0] === characterIds[1]) {
     return cards.map((c) =>
-      c.characterId === ids[0] ? { ...c, status: "matched" } : c,
+      c.characterId === characterIds[0] ? { ...c, status: "matched" } : c,
     );
   }
 
   // No match
   return cards.map((c) =>
-    ids.includes(c.characterId) ? { ...c, status: "flipped" } : c,
+    cardIds.includes(c.id) ? { ...c, status: "flipped" } : c,
   );
 };

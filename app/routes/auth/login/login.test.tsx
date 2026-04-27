@@ -38,17 +38,6 @@ vi.mock("sonner", () => ({
   Toaster: () => null,
 }));
 
-vi.mock("react-router", async () => {
-  const actual = (await vi.importActual("react-router")) as Record<
-    string,
-    unknown
-  >;
-  return {
-    ...actual,
-    useNavigate: () => vi.fn(),
-  };
-});
-
 describe("Tests login page", () => {
   beforeEach(() => {
     signInWithEmailAndPasswordMock.mockReset();
