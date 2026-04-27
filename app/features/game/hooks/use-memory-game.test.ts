@@ -29,10 +29,10 @@ describe("useMemoryGame", () => {
     });
     const { result } = renderHook(() => useMemoryGame());
 
-    act(() => {
-      result.current.handleReloadGame();
-      expect(refetchFn).toHaveBeenCalledOnce();
+    await act(async () => {
+      await result.current.handleReloadGame();
     });
+    expect(refetchFn).toHaveBeenCalledOnce();
   });
 
   it("Should mark cards as matched", async () => {

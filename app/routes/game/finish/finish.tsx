@@ -1,12 +1,16 @@
 import { Button } from "~/ui/button/button";
 import styles from "./finish.module.scss";
-import { useLocation, useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import type { GameResult } from "~/features/game/types/game-result";
+import { gameSession } from "~/features/game/utils/game-session";
 
 export default function FinishPage() {
   const location = useLocation();
   const state = location.state as GameResult | null;
   const navigate = useNavigate();
+  console.log({ "gameSession.isFinished": gameSession.isFinished() });
+
+  if (!gameSession.isFinished()) return <Navigate to="/game" />;
 
   return (
     <div className={styles.finishPageContainer}>

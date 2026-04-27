@@ -4,10 +4,11 @@ import { useRefetchCooldown } from "./use-refetch-cooldown";
 import { type Card } from "../types/card";
 import { sleep } from "~/helpers";
 import { useSafeTimer } from "./use-safe-timer";
-import { resolveMatch, setupBoard, shuffle } from "../utils/gameUtils";
+import { resolveMatch, setupBoard, shuffle } from "../utils/game-utils";
 import { usePersistedState } from "~/hooks/use-persisted-state";
 import { useNavigate } from "react-router";
 import type { GameResult } from "../types/game-result";
+import { gameSession } from "../utils/game-session";
 
 export const useMemoryGame = () => {
   const {
@@ -35,6 +36,7 @@ export const useMemoryGame = () => {
 
   useEffect(() => {
     if (characters && !hasInitialized.current) {
+      gameSession.reset();
       setCards(setupBoard(characters));
       hasInitialized.current = true;
     }
@@ -45,6 +47,7 @@ export const useMemoryGame = () => {
     if (!cards.length) return;
     const isFinished = cards.every((card) => card.status === "matched");
     if (isFinished) {
+      gameSession.finish();
       navigate("/game/finish", { state: { turns } satisfies GameResult });
       setCards([]);
     }

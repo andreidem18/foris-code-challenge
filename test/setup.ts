@@ -6,8 +6,9 @@ vi.mock("react-router", async () => {
     string,
     unknown
   >;
+  const mockNavigate = vi.fn();
   return {
     ...actual,
-    useNavigate: () => vi.fn(),
+    useNavigate: () => mockNavigate,
   };
 });

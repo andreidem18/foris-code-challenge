@@ -15,10 +15,9 @@ export const MemoryCard = ({ card, flipCard }: Props) => {
   const isFlipped = card.status === "flipped";
 
   return (
-    <div
+    <button
       className={clsx(styles.card, isFlipped && styles.flipped)}
       onClick={() => flipCard(card)}
-      role="button"
     >
       <div className={styles.cardInner}>
         <div className={clsx(styles.cardFace, styles.cardFront)}>
@@ -40,6 +39,6 @@ export const MemoryCard = ({ card, flipCard }: Props) => {
           />
         </div>
       </div>
-    </div>
+    </button>
   );
 };
