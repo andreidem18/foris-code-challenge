@@ -1,4 +1,5 @@
 @use "~/styles/variables" as v;
+@use "~/styles/mixins" as m;
 
 .centerLayout {
   display: flex;
@@ -15,6 +16,37 @@
   gap: 1.5rem;
   padding-top: 2rem;
   align-items: center;
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.backButton {
+  @include m.flex-center;
+  background: none;
+  border: 0.1rem solid v.$yellow-1;
+  flex-shrink: 0;
+  padding: 0.25rem;
+  border-radius: 100%;
+  height: 2rem;
+  width: 2rem;
+  svg {
+    color: v.$yellow-1;
+    height: 1.2rem;
+    width: 1.2rem;
+  }
+}
+
+.logoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .logo {
@@ -59,5 +91,14 @@
   img {
     width: 100%;
     height: 100%;
+  }
+}
+
+@media (min-width: v.$md) {
+  .backButton {
+    position: absolute;
+    left: -10%;
+    height: 2.5rem;
+    width: 2.5rem;
   }
 }

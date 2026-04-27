@@ -9,7 +9,8 @@ export default [
   index("routes/redirect.tsx"),
 
   layout("./routes/game/layout.tsx", [
-    route("/game", "./routes/game/(game)/game.tsx"),
+    route("/game/menu", "./routes/game/menu/menu.tsx"),
+    route("/game/board", "./routes/game/board/board.tsx"),
     route("/game/finish", "./routes/game/finish/finish.tsx"),
   ]),
 

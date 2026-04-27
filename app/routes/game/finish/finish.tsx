@@ -20,8 +20,10 @@ export default function FinishPage() {
           Terminaste el juego en {state?.turns} intentos
         </div>
         <div className={styles.buttons}>
-          <Button onClick={() => navigate("/game")}>Repetir</Button>
-          <Button variant="secondary">Inicio</Button>
+          <Button onClick={() => navigate("/game/board")}>Repetir</Button>
+          <Button variant="secondary" onClick={() => navigate("/game/menu")}>
+            Inicio
+          </Button>
         </div>
       </div>
     </div>

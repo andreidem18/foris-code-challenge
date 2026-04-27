@@ -74,6 +74,7 @@ export const useMemoryGame = () => {
   };
 
   const startGame = async () => {
+    gameSession.start();
     setGameStarted(true);
     setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
     await sleep(300);

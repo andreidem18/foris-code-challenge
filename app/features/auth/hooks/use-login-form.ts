@@ -26,7 +26,7 @@ export function useLoginForm() {
     try {
       await loginWithEmail(values);
       toast.success("Login exitoso");
-      navigate("/game");
+      navigate("/game/menu");
     } catch (error) {
       const mapped = mapLoginAuthError(error);
 
