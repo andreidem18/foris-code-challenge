@@ -10,6 +10,7 @@
   background: none;
   display: block;
   width: 100%;
+  border-radius: 0.4rem;
 }
 
 .characterName {
@@ -46,6 +47,7 @@
   box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.2);
   border-radius: 0.25rem;
   text-align: left;
+  border-radius: 0.4rem;
 }
 
 .cardFace {
@@ -57,6 +59,7 @@
 
 .cardFront {
   background: v.$white;
+  border-radius: 0.4rem;
 }
 
 .cardBack {
@@ -64,6 +67,7 @@
   transform: rotateY(180deg);
   background: v.$blue-1;
   padding: 1rem;
+  border-radius: 0.4rem;
 }
 
 .backCardImage {
