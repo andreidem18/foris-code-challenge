@@ -33,7 +33,8 @@
   }
 
   .characterDescription {
-    width: 10rem;
+    width: 100%;
+    max-width: 10rem;
     height: 0.8rem;
     display: block;
   }
