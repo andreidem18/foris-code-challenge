@@ -79,6 +79,7 @@ export const useMemoryGame = () => {
 
   const flipCard = async (card: Card) => {
     if (!gameStarted || !(card.status === "flipped")) return;
+    if (safeTimerRef.current) safeTimerRef.current.abort();
     const currentCards = cards.map((c): Card => {
       if (c.id === card.id) {
         return { ...c, status: "unflipped" };
@@ -90,18 +91,16 @@ export const useMemoryGame = () => {
   };
 
   const checkMatch = async (currentCards: Card[]) => {
-    const unflippedIds = currentCards
-      .filter((card) => card.status === "unflipped")
-      .map((card) => card.characterId);
+    const unflipped = currentCards.filter(
+      (card) => card.status === "unflipped",
+    );
 
-    if (safeTimerRef.current) safeTimerRef.current.abort();
-
-    if (unflippedIds.length !== 2) return;
+    if (unflipped.length !== 2) return;
 
     setTurns((t) => t + 1);
 
     safeTimer(() => {
-      setCards((cards) => resolveMatch(cards, unflippedIds));
+      setCards((cards) => resolveMatch(cards, unflipped));
     }, 1000);
   };
 

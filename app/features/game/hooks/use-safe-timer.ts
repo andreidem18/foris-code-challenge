@@ -7,7 +7,6 @@ export const useSafeTimer = () => {
   const safeTimerRef = useRef<AbortController | null>(null);
 
   const safeTimer = async (callback: () => void, time: number) => {
-    console.log({ "safeTimerRef.current": safeTimerRef.current });
     if (safeTimerRef.current) safeTimerRef.current.abort();
 
     const controller = new AbortController();

@@ -39,6 +39,7 @@ export const MemoryGame = () => {
                 disabled={isRefetchBlocked}
                 className={styles.refetchButton}
                 variant="outline"
+                aria-label={"Traer otros personajes"}
               >
                 {isRefetchBlocked ? <Spinner /> : <ReloadIcon />}
               </Button>
