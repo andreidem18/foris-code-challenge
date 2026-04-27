@@ -8,7 +8,6 @@ export default function FinishPage() {
   const location = useLocation();
   const state = location.state as GameResult | null;
   const navigate = useNavigate();
-  console.log({ "gameSession.isFinished": gameSession.isFinished() });
 
   if (!gameSession.isFinished()) return <Navigate to="/game" />;
 
