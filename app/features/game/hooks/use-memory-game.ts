@@ -119,9 +119,9 @@ export const useMemoryGame = () => {
   const startGame = async () => {
     setElapsedMs(0);
     setGameStarted(true);
+    await shuffleCards();
+    await sleep(3000);
     setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
-    await sleep(300);
-    shuffleCards();
   };
 
   return {
