@@ -1,95 +1,149 @@
-# Rick and Morty Memory code challenge
+# Rick and Morty Memory (Code Challenge)
 
-## Getting Started
+A small memory game using the Rick and Morty API, with Firebase auth and a leaderboard.
 
-### Installation
+**Tech stack**
 
-Install the dependencies:
+- Runtime & tooling: Node.js, pnpm, Vite
+- App framework: React 19 + React Router 7
+- Language: TypeScript
+- Data fetching: GraphQL (via `graphql-request`) + TanStack React Query
+- Auth & persistence: Firebase Auth + Firestore
+- State: Zustand
+- Forms & validation: React Hook Form + Zod
+- UI: Sass (CSS Modules), Radix Icons, Sonner (toasts), Motion
+- Testing: Vitest + Testing Library
+
+**Technical decisions & reasoning**
+
+- React Router 7: file-based routing and a clean separation between routes and feature modules.
+- TanStack React Query: consistent server-state management (loading/error states, caching, refetching) for both GraphQL and Firestore reads.
+- GraphQL (`graphql-request`) for Rick & Morty: strongly-typed data needs and fewer network roundtrips when fetching multiple entities.
+- Firebase Auth + Firestore: fast to integrate for a code challenge while still representing a realistic auth + persistence stack.
+- Zustand for game state: minimal boilerplate, easy to model game transitions (cards, turns, elapsed time) and share state across hooks/components.
+- React Hook Form + Zod: schema-first validation with good UX and predictable error handling.
+- Sass + CSS Modules: local scoping by default, keeping styles close to components without introducing a full UI framework.
+- Vitest + Testing Library: fast feedback loop and tests focused on observable behavior.
+
+**Tradeoffs**
+
+- Firebase client SDK is initialized at import time. This keeps app code simple, but tests need module mocks (or a dedicated firebase adapter layer).
+- Persisted Zustand store is great for UX, but adds test complexity (localStorage) and requires resets between tests.
+- React Query requires a `QueryClientProvider` in tests. App wiring is straightforward, but unit tests must wrap hooks/components.
+
+**Development approach**
+
+- Feature-first structure under `app/features/*` to keep domain logic (hooks/services/schemas) discoverable.
+- Keep state responsibilities explicit:
+  - “Server state” via React Query.
+  - “Client/game state” via Zustand.
+- Prefer small, testable hooks and utilities (e.g. board setup, matching resolution, timers).
+- Validate and handle errors at the edges (forms/services), map backend errors into user-friendly messages.
+- Automate DX tasks (CSS module typings via `pnpm tsm`) and keep scripts standardized with `pnpm`.
+
+**Requirements**
+
+- Node.js (LTS recommended)
+- pnpm
+
+**Getting started**
+
+1. Install dependencies:
 
 ```bash
 pnpm install
 ```
 
-### Development
+1. Create a `.env` file based on `.env.example`:
 
-Start the development server with HMR:
+```bash
+copy .env.example .env
+```
+
+1. Fill in the environment variables:
+
+- `VITE_FIREBASE_API_KEY`: Firebase web API key
+- `VITE_FIREBASE_AUTH_DOMAIN`: Firebase auth domain
+- `VITE_FIREBASE_PROJECT_ID`: Firebase project id
+- `VITE_FIREBASE_APP_ID`: Firebase app id
+- `VITE_RICK_MORTY_GRAPHQL_URL`: Rick & Morty GraphQL endpoint
+
+**Development**
+
+Run the dev server:
 
 ```bash
 pnpm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+App runs at `http://localhost:5173`.
 
-It's also recommended to run parallelly
-
-```bash
-pnpm run tsm
-```
-
-This is used to generate scss.d.ts modules to create types and improve
-the developer experience
-
-## Building for Production
-
-Create a production build:
+Optional (recommended while developing): generate `.scss.d.ts` types for CSS modules:
 
 ```bash
-pnpm run build
+pnpm tsm
 ```
 
-## Deployment
+**Tests**
 
-## 📁 Folder structure
+```bash
+pnpm test
+```
+
+Other useful commands:
+
+```bash
+pnpm test:run
+pnpm test:coverage
+pnpm typecheck
+pnpm lint
+pnpm format
+```
+
+**Build & run**
+
+```bash
+pnpm build
+pnpm start
+```
+
+**Project structure**
 
 ```
-  app/ # Application-level configuration
-  router/ # Routing configuration and route guards
-  providers/ # Global providers (e.g., AuthProvider)
-
-  features/ # Domain-based modules (business logic)
+app/
+  assets/            # Images, fonts, etc.
+  config/            # Runtime env parsing (Zod)
+  features/          # Domain modules
     auth/
-      services/ # Authentication logic (Firebase integration)
-      hooks/ # Custom hooks (e.g., useAuth)
-      types.ts # Auth-related types
-
+      components/
+      hooks/
+      schemas/
+      services/
+      utils/
     game/
-      components/     # Game-specific UI (e.g., MemoryCard, GameBoard)
-      hooks/          # Game logic (e.g., useMemoryGame)
-      utils/          # Helper functions (e.g., shuffle logic)
-      types.ts        # Game-related types
-
-  pages/ # Route-level components (views)
-    Login/
-    Game/
-
-  components/ # Reusable UI components (shared across features)
-    Button/
-    Input/
-    Spinner/
-
-  styles/ # Global styling (Sass)
-    \_variables.scss # Design tokens (colors, spacing, etc.)
-    \_mixins.scss # Reusable style logic
-    \_globals.scss # Base styles (reset, typography, body)
-
-  types/ # Global TypeScript types (if needed)
-  utils/ # Shared utilities
+      components/
+      hooks/
+      mock-data/
+      services/
+      store/
+      types/
+      utils/
+    scores/
+      mutations/
+      queries/
+      types/
+  guards/            # Route guards
+  helpers/           # Shared helpers
+  lib/               # Shared integrations (e.g. Firebase client)
+  ui/                # Reusable UI components
+  styles/            # Global Sass
+test/
+  setup.ts           # Vitest setup
 ```
 
-### DIY Deployment
+**Deployment (AWS)**
 
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## 🎨 Styling
-
-This app uses Sass and CSS modules to handle styles.
+- Infrastructure: S3 (static artifacts) + CloudFront (CDN/HTTPS/cache), using Origin Access Control (OAC)
+- CI/CD: GitHub Actions
+- Auth to AWS: OIDC (no long-lived AWS keys)
+- Typical flow: push to `main` -> install -> build -> upload to S3 -> invalidate CloudFront

@@ -1,4 +1,4 @@
 import { signOut } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "~/lib/firebase";
 
 export const logout = () => signOut(auth);

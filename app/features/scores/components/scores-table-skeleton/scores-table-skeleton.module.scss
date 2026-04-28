@@ -1,0 +1,38 @@
+@use "~/styles/variables" as v;
+@use "~/styles/mixins" as m;
+
+.avatar {
+  width: 2.8125rem;
+  height: 2.8125rem;
+  border-radius: 100%;
+}
+
+.rankCol {
+  width: 3.25rem;
+  text-align: center;
+  color: v.$neutral-70;
+}
+
+.numericCol {
+  width: 7rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 14rem;
+}
+
+.userName {
+  font-weight: 700;
+  width: 8rem;
+}
+
+.empty {
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  color: v.$neutral-70;
+}

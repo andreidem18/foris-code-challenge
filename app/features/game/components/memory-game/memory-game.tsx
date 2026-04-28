@@ -9,6 +9,7 @@ import { useMemoryGame } from "../../hooks/use-memory-game";
 import styles from "./memory-game.module.scss";
 import { CardGridSkeleton } from "../card-grid-skeleton/card-grid-skeleton";
 import { useFlipCard } from "../../hooks/use-flip-card";
+import { GameTimer } from "../game-timer/game-timer";
 
 export const MemoryGame = () => {
   const {
@@ -32,6 +33,7 @@ export const MemoryGame = () => {
           <>
             <div>Aciertos: {getMatches()}</div>
             <div className={styles.turnsAndExit}>
+              <GameTimer />
               <div>Turnos: {turns}</div>
               <Button onClick={exitGame} variant="danger">
                 Salir

@@ -11,7 +11,7 @@ const signInWithPopupMock = vi.fn();
 const toastSuccessMock = vi.fn();
 const toastErrorMock = vi.fn();
 
-vi.mock("~/features/auth/services/firebase", () => ({
+vi.mock("~/lib/firebase", () => ({
   auth: { currentUser: null },
 }));
 

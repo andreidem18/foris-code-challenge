@@ -1,18 +1,24 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import type { Card } from "../types/card";
+import type { IsRecord } from "../types/is-record";
 
 type setCardsCallback = (currentState: Card[]) => Card[];
 type setTurnsCallback = (currentState: number) => number;
+type setElapsedMsCallback = (currentState: number) => number;
 
 interface GameState {
   cards: Card[];
   gameStarted: boolean;
   turns: number;
+  elapsedMs: number;
+  isRecord: IsRecord;
 
   setCards: (value: Card[] | setCardsCallback) => void;
   setGameStarted: (value: boolean) => void;
   setTurns: (value: number | setTurnsCallback) => void;
+  setElapsedMs: (value: number | setElapsedMsCallback) => void;
+  setIsRecord: (value: IsRecord) => void;
   resetGame: () => void;
   isGameFinished: () => boolean;
 }
@@ -24,6 +30,8 @@ export const useGameStore = create<GameState>()(
         cards: [],
         gameStarted: false,
         turns: 0,
+        elapsedMs: 0,
+        isRecord: { newPersonalRecord: false, newGlobalRecord: false },
 
         setCards: (value) => {
           if (typeof value === "function") {
@@ -40,6 +48,14 @@ export const useGameStore = create<GameState>()(
           }
           set(() => ({ turns: value }));
         },
+        setElapsedMs: (value) => {
+          if (typeof value === "function") {
+            set((s) => ({ elapsedMs: value(s.elapsedMs) }));
+            return;
+          }
+          set(() => ({ elapsedMs: value }));
+        },
+        setIsRecord: (value) => set({ isRecord: value }),
         isGameFinished: () => {
           const { cards } = get();
           return (
@@ -52,6 +68,11 @@ export const useGameStore = create<GameState>()(
             cards: [],
             turns: 0,
             gameStarted: false,
+            elapsedMs: 0,
+            isRecord: {
+              newGlobalRecord: false,
+              newPersonalRecord: false,
+            },
           });
         },
       }),

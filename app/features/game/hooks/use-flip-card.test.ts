@@ -12,6 +12,10 @@ vi.mock("./use-fetch-characters", () => ({
   useFetchCharacters: (...args: unknown[]) => useFetchCharactersMock(...args),
 }));
 
+vi.mock("~/features/scores/mutations/use-save-score", () => ({
+  useSaveScore: () => ({mutateAsync: vi.fn()}),
+}));
+
 export const useMemoryGameFacade = () => {
   const flipCard = useFlipCard();
   const memoryGame = useMemoryGame();
