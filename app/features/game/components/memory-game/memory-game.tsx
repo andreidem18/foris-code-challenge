@@ -23,6 +23,7 @@ export const MemoryGame = () => {
     getMatches,
     turns,
   } = useMemoryGame();
+  // const isFetching = true;
 
   const { flipCard } = useFlipCard();
 
