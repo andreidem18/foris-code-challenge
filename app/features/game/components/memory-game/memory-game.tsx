@@ -33,8 +33,9 @@ export const MemoryGame = () => {
             <div>Aciertos: {getMatches()}</div>
             <div className={styles.turnsAndExit}>
               <div>Turnos: {turns}</div>
-              {/* TODO: create a danger variant */}
-              <Button onClick={exitGame}>Salir</Button>
+              <Button onClick={exitGame} variant="danger">
+                Salir
+              </Button>
             </div>
           </>
         ) : (
