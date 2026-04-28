@@ -24,7 +24,7 @@ export default function LoginPage() {
       navigate("/game/menu");
     } catch (error) {
       console.error(error);
-      toast.error("No se pudo iniciar sesi\u00f3n con Google");
+      toast.error("No se pudo iniciar sesión con Google");
     }
   };
 
