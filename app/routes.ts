@@ -8,14 +8,16 @@ import {
 export default [
   index("routes/redirect.tsx"),
 
-  layout("./routes/game/layout.tsx", [
-    route("/game/menu", "./routes/game/menu/menu.tsx"),
-    route("/game/board", "./routes/game/board/board.tsx"),
-    route("/game/finish", "./routes/game/finish/finish.tsx"),
-  ]),
-
   layout("./routes/auth/auth.tsx", [
     route("/auth/login", "./routes/auth/login/login.tsx"),
     route("/auth/register", "./routes/auth/register/register.tsx"),
+  ]),
+
+  layout("./guards/require-session.tsx", [
+    layout("./routes/game/layout.tsx", [
+      route("/game/menu", "./routes/game/menu/menu.tsx"),
+      route("/game/board", "./routes/game/board/board.tsx"),
+      route("/game/finish", "./routes/game/finish/finish.tsx"),
+    ]),
   ]),
 ] satisfies RouteConfig;

@@ -8,7 +8,6 @@ interface Props extends React.ComponentProps<typeof AvatarPrimitive.Root> {
 }
 
 export const Avatar = ({ url, userName }: Props) => {
-  console.log(getInitials(userName));
   function getInitials(name: string): string {
     return name
       .trim()
