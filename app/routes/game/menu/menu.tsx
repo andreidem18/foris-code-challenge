@@ -28,7 +28,9 @@ export default function MenuPage() {
         >
           Reanudar juego
         </Button>
-        <Button variant="secondary">Mis puntajes</Button>
+        <Button variant="secondary" onClick={() => navigate("/game/scores")}>
+          Mis puntajes
+        </Button>
       </div>
     </div>
   );

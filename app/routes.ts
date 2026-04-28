@@ -18,6 +18,7 @@ export default [
       route("/game/menu", "./routes/game/menu/menu.tsx"),
       route("/game/board", "./routes/game/board/board.tsx"),
       route("/game/finish", "./routes/game/finish/finish.tsx"),
+      route("/game/scores", "./routes/game/scores/scores.tsx"),
     ]),
   ]),
 ] satisfies RouteConfig;
