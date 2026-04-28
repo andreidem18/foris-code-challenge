@@ -1,4 +1,11 @@
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+  where,
+} from "firebase/firestore";
 import { useQuery } from "@tanstack/react-query";
 
 import { db } from "~/lib/firebase";
@@ -7,22 +14,25 @@ import type { ScoreRes } from "../types/score";
 
 export const FETCH__PERSONAL_LEADERBOARD_KEY = "personalLeaderboard";
 
-export const useFetchPersonalLeaderboard = () => {
+interface Params {
+  userId: string | null | undefined;
+}
+
+export const useFetchPersonalLeaderboard = ({ userId }: Params) => {
   return useQuery({
     queryKey: [FETCH__PERSONAL_LEADERBOARD_KEY],
-    queryFn: async () => {
+    queryFn: async (): Promise<Score[]> => {
+      if (!userId) return [];
+
       const q = query(
         collection(db, "scores"),
+        where("userId", "==", userId),
         orderBy("turns", "asc"),
         orderBy("time", "asc"),
         limit(20),
       );
 
-      try {
-        await getDocs(q);
-      } catch (error) {
-        console.log(error);
-      }
+      await getDocs(q);
       const snapshot = await getDocs(q);
 
       return snapshot.docs.map(
@@ -32,5 +42,6 @@ export const useFetchPersonalLeaderboard = () => {
         }),
       );
     },
+    enabled: Boolean(userId),
   });
 };

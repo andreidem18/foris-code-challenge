@@ -9,14 +9,17 @@ import { formatElapsedTime } from "~/features/game/utils/format-elapsed-time";
 import { ScoresTableSkeleton } from "../scores-table-skeleton/scores-table-skeleton";
 import { timestampToDate } from "../../utils/timestampToDate";
 import { useFetchGlobalLeaderboard } from "../../queries/use-fetch-global-leaderboard";
+import { useAuth } from "~/features/auth/hooks/use-auth";
 
 interface Props {
   scope: scoreType;
 }
 
 export const ScoresTable = ({ scope }: Props) => {
+  const { user } = useAuth();
+
   const { data: personalScoresList, isLoading: isLeaderboardLoading } =
-    useFetchPersonalLeaderboard();
+    useFetchPersonalLeaderboard({ userId: user?.uid });
   const { data: globalScoresList, isLoading: isGlobalLeaderboardLoading } =
     useFetchGlobalLeaderboard();
 

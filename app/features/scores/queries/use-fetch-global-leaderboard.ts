@@ -18,11 +18,7 @@ export const useFetchGlobalLeaderboard = () => {
         limit(20),
       );
 
-      try {
-        await getDocs(q);
-      } catch (error) {
-        console.log(error);
-      }
+      await getDocs(q);
       const snapshot = await getDocs(q);
 
       return snapshot.docs.map(

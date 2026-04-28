@@ -40,7 +40,6 @@ export const useSaveScore = () => {
       // update best score
       const ref = doc(db, "bestScores", params.userId);
       const existing = await getDoc(ref);
-      console.log({ "existing.exists()": existing.exists() });
 
       if (!existing.exists()) {
         await setDoc(ref, newScore);
