@@ -4,6 +4,10 @@ import styles from "./menu.module.scss";
 import { useNavigate } from "react-router";
 import { useGameStore } from "~/features/game/store/game-store";
 
+export function meta() {
+  return [{ title: "Game" }, { name: "description", content: "Memory game" }];
+}
+
 export default function MenuPage() {
   const navigate = useNavigate();
 

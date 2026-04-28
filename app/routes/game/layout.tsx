@@ -6,6 +6,7 @@ import { Link, Navigate, Outlet, useLocation } from "react-router";
 import styles from "./layout.module.scss";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { useGameStore } from "~/features/game/store/game-store";
+import { SessionBubble } from "~/features/auth/components/session-bubble/session-bubble";
 
 export default function GameLayout() {
   // TODO: implement in a specific component to validate session
@@ -41,13 +42,7 @@ export default function GameLayout() {
           </div>
         </div>
       </div>
-
-      {/* TODO: Create a good button to handle the session */}
-      <button className={styles.sessionButton}>
-        {user?.photoURL && (
-          <img src={user?.photoURL} alt={user.displayName || ""} />
-        )}
-      </button>
+      <SessionBubble />
     </>
   );
 }
