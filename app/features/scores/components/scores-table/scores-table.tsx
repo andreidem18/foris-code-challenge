@@ -1,20 +1,28 @@
-import type { Score, scoreType } from "../../types";
-import { useFetchLeaderboard } from "../../queries/use-fetch-leaderboard";
+import { es } from "date-fns/locale";
+import { format } from "date-fns";
 
+import type { Score, scoreType } from "../../types";
+import { useFetchPersonalLeaderboard } from "../../queries/use-fetch-personal-leaderboard";
 import styles from "./scores-table.module.scss";
 import { Avatar } from "~/ui/avatar/avatar";
 import { formatElapsedTime } from "~/features/game/utils/format-elapsed-time";
 import { ScoresTableSkeleton } from "../scores-table-skeleton/scores-table-skeleton";
+import { timestampToDate } from "../../utils/timestampToDate";
+import { useFetchGlobalLeaderboard } from "../../queries/use-fetch-global-leaderboard";
 
 interface Props {
   scope: scoreType;
 }
 
 export const ScoresTable = ({ scope }: Props) => {
-  const { data: scoresList, isLoading } = useFetchLeaderboard();
+  const { data: personalScoresList, isLoading: isLeaderboardLoading } =
+    useFetchPersonalLeaderboard();
+  const { data: globalScoresList, isLoading: isGlobalLeaderboardLoading } =
+    useFetchGlobalLeaderboard();
 
-  // TODO: delete this
-  console.log(scope);
+  const scoresList =
+    scope === "personal" ? personalScoresList : globalScoresList;
+  const isLoading = isLeaderboardLoading || isGlobalLeaderboardLoading;
 
   return (
     <table className={styles.table}>
@@ -29,6 +37,9 @@ export const ScoresTable = ({ scope }: Props) => {
           </th>
           <th className={styles.numericCol} scope="col">
             Tiempo
+          </th>
+          <th className={styles.numericCol} scope="col">
+            Fecha
           </th>
         </tr>
       </thead>
@@ -56,17 +67,22 @@ const ScoresTableBody = ({ scoresList, isLoading }: ScoresTableBodyProps) => {
       </tr>
     );
   }
-  return scoresList.map((score, index) => (
-    <tr key={score.id}>
-      <td className={styles.rankCol}>{index + 1}</td>
-      <td>
-        <div className={styles.userCell}>
-          <Avatar url={score.photoURL} userName={score.userName} />
-          <span className={styles.userName}>{score.userName}</span>
-        </div>
-      </td>
-      <td className={styles.numericCol}>{score.turns}</td>
-      <td className={styles.numericCol}>{formatElapsedTime(score.time)}</td>
-    </tr>
-  ));
+  return scoresList.map((score, index) => {
+    const date = timestampToDate(score.createdAt);
+    const dateFormatted = format(date, "dd-MM-yyyy h:mmaaa", { locale: es });
+    return (
+      <tr key={score.id}>
+        <td className={styles.rankCol}>{index + 1}</td>
+        <td>
+          <div className={styles.userCell}>
+            <Avatar url={score.photoURL} userName={score.userName} />
+            <span className={styles.userName}>{score.userName}</span>
+          </div>
+        </td>
+        <td className={styles.numericCol}>{score.turns}</td>
+        <td className={styles.numericCol}>{formatElapsedTime(score.time)}</td>
+        <td className={styles.dateCol}>{dateFormatted}</td>
+      </tr>
+    );
+  });
 };

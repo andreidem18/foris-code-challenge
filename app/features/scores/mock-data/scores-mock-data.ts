@@ -9,5 +9,9 @@ export const scoresMockData: Score[] = [
     turns: 20,
     userId: "nwHfQoVw9IPjTcQybgk8Vb72w6R2",
     userName: "Andrés Mendoza",
+    createdAt: {
+      nanoseconds: 114000000,
+      seconds: 1777399410,
+    },
   },
 ];

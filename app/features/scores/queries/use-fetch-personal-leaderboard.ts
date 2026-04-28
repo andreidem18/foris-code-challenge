@@ -5,9 +5,11 @@ import { db } from "~/lib/firebase";
 import type { Score } from "../types";
 import type { ScoreRes } from "../types/score";
 
-export const useFetchLeaderboard = () => {
+export const FETCH__PERSONAL_LEADERBOARD_KEY = "personalLeaderboard";
+
+export const useFetchPersonalLeaderboard = () => {
   return useQuery({
-    queryKey: ["leaderboard"],
+    queryKey: [FETCH__PERSONAL_LEADERBOARD_KEY],
     queryFn: async () => {
       const q = query(
         collection(db, "scores"),
@@ -22,8 +24,6 @@ export const useFetchLeaderboard = () => {
         console.log(error);
       }
       const snapshot = await getDocs(q);
-      console.log("Me ejecute");
-      console.log({ snapshot });
 
       return snapshot.docs.map(
         (doc): Score => ({

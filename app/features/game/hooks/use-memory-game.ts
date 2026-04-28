@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useFetchCharacters } from "./use-fetch-characters";
 import { useRefetchCooldown } from "./use-refetch-cooldown";
 import { sleep } from "~/helpers";
@@ -6,6 +6,9 @@ import { setupBoard, shuffle } from "../utils/game-utils";
 import { useNavigate } from "react-router";
 import { useGameStore } from "../store/game-store";
 import type { LocationState } from "../types/locationState";
+import { useSaveScore } from "~/features/scores/mutations/use-save-score";
+import { useAuth } from "~/features/auth/hooks/use-auth";
+import { toast } from "sonner";
 
 export const useMemoryGame = () => {
   const {
@@ -14,6 +17,7 @@ export const useMemoryGame = () => {
     isFetching,
     refetch,
   } = useFetchCharacters();
+  const { mutateAsync: saveScoreMutation } = useSaveScore();
 
   const {
     cards,
@@ -24,7 +28,11 @@ export const useMemoryGame = () => {
     resetGame,
     isGameFinished,
     setElapsedMs,
+    elapsedMs,
+    setIsRecord,
   } = useGameStore();
+  const { user } = useAuth();
+
   const navigate = useNavigate();
 
   const getMatches = () => {
@@ -48,16 +56,45 @@ export const useMemoryGame = () => {
     handleReloadGame();
   };
 
+  const saveScore = useCallback(async () => {
+    if (!user) {
+      toast.error(
+        "Hay un problema con la autenticación. No es posible guardar tu puntaje",
+      );
+      return;
+    }
+    const isRecord = await saveScoreMutation({
+      time: elapsedMs,
+      turns,
+      userId: user.uid,
+      userName: user.displayName || "Anonimo",
+      photoURL: user.photoURL,
+    });
+    setIsRecord(isRecord);
+  }, [elapsedMs, saveScoreMutation, turns, user, setIsRecord]);
+
   // Check game end
   useEffect(() => {
-    if (!cards.length) return;
-    if (isGameFinished()) {
+    const finishGame = async () => {
+      await saveScore();
       setGameStarted(false);
       navigate("/game/finish", {
         state: { fromGame: true } satisfies LocationState,
       });
+    };
+    if (!cards.length) return;
+    if (isGameFinished()) {
+      finishGame();
     }
-  }, [cards, navigate, setCards, turns, setGameStarted, isGameFinished]);
+  }, [
+    cards,
+    navigate,
+    setCards,
+    turns,
+    setGameStarted,
+    isGameFinished,
+    saveScore,
+  ]);
 
   const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({
     refetch,

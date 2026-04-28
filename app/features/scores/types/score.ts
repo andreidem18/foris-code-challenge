@@ -5,6 +5,7 @@ export interface Score {
   turns: number;
   userId: string;
   userName: string;
+  createdAt: FirestoreTimestamp;
 }
 
 export interface ScoreRes {
@@ -13,4 +14,10 @@ export interface ScoreRes {
   turns: number;
   userId: string;
   userName: string;
+  createdAt: FirestoreTimestamp;
+}
+
+export interface FirestoreTimestamp {
+  nanoseconds: number;
+  seconds: number;
 }

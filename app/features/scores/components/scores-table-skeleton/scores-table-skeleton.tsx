@@ -21,6 +21,9 @@ export const ScoresTableSkeleton = () => {
       <td className={styles.numericCol}>
         <Skeleton />
       </td>
+      <td className={styles.numericCol}>
+        <Skeleton />
+      </td>
     </tr>
   ));
 };

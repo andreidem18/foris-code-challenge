@@ -1,6 +1,8 @@
+import { StarFilledIcon } from "@radix-ui/react-icons";
+import { Navigate, useLocation, useNavigate } from "react-router";
+
 import { Button } from "~/ui/button/button";
 import styles from "./finish.module.scss";
-import { Navigate, useLocation, useNavigate } from "react-router";
 import { useGameStore } from "~/features/game/store/game-store";
 import type { LocationState } from "~/features/game/types/locationState";
 import { formatElapsedTime } from "~/features/game/utils/format-elapsed-time";
@@ -11,7 +13,7 @@ export function meta() {
 
 export default function FinishPage() {
   const navigate = useNavigate();
-  const { turns, resetGame, elapsedMs } = useGameStore();
+  const { turns, resetGame, elapsedMs, isRecord } = useGameStore();
 
   const location = useLocation() as { state: LocationState };
 
@@ -40,6 +42,24 @@ export default function FinishPage() {
           >
             Inicio
           </Button>
+        </div>
+        <div className={styles.records}>
+          {isRecord.newPersonalRecord && (
+            <div className={styles.personalRecord}>
+              <StarFilledIcon />
+              <div>
+                ¡Lograste un record <span>personal</span>!
+              </div>
+            </div>
+          )}
+          {isRecord.newGlobalRecord && (
+            <div className={styles.globalRecord}>
+              <StarFilledIcon />
+              <div>
+                ¡Lograste un record <span>global</span>!
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
