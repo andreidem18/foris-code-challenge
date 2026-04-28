@@ -23,6 +23,7 @@ export const useMemoryGame = () => {
     turns,
     resetGame,
     isGameFinished,
+    setElapsedMs,
   } = useGameStore();
   const navigate = useNavigate();
 
@@ -79,6 +80,7 @@ export const useMemoryGame = () => {
   };
 
   const startGame = async () => {
+    setElapsedMs(0);
     setGameStarted(true);
     setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
     await sleep(300);
