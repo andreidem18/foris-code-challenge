@@ -31,6 +31,8 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 
 - Radix UI: used for components like popover and avatar to ensure good accessibility out of the box without building primitives from scratch.
 
+- Motion: used to handle cards shuffle animations and improving user experience.
+
 - React Hook Form + Zod: schema-first validation with good UX and predictable error handling.
 
 - Sass + CSS Modules: local scoping by default, keeping styles close to components without introducing a full UI framework.
@@ -43,14 +45,6 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 
 - Authentication is validated asynchronously.  
   This allows the app to load faster without blocking the UI, but introduces a brief moment where an unauthenticated user could see a protected route before being redirected.
-
-- Firebase client SDK is initialized at import time.  
-  This keeps app code simple, but tests need module mocks (or a dedicated firebase adapter layer).
-
-- Persisted Zustand store improves UX, but adds test complexity (localStorage) and requires resets between tests.
-
-- React Query requires a `QueryClientProvider` in tests.  
-  App wiring is straightforward, but unit tests must wrap hooks/components.
 
 ---
 
@@ -77,6 +71,9 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - Implement lazy loading / infinite scroll in the leaderboard table (not included due to time constraints).
 
 - Introduce a multiplayer mode using WebSockets for real-time gameplay.
+
+- Add a confirmation dialog when the user attempts to exit an active game, to prevent accidental progress loss.
+
 
 ---
 
