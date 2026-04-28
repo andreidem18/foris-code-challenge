@@ -1,0 +1,59 @@
+@use "~/styles/variables" as v;
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: v.$white;
+    text-align: left;
+    font-size: 0.9rem;
+    color: v.$neutral-90;
+    border-bottom: 0.1rem solid rgba(0, 0, 0, 0.08);
+    padding: 0.75rem 0.75rem;
+  }
+
+  tbody td {
+    padding: 0.75rem 0.75rem;
+    border-bottom: 0.1rem solid rgba(0, 0, 0, 0.06);
+    color: v.$neutral-90;
+    text-align: left;
+  }
+
+  tbody tr:hover td {
+    background: v.$white-2;
+    text-align: left;
+  }
+}
+
+.rankCol {
+  width: 3.25rem;
+  text-align: center;
+  color: v.$neutral-70;
+  padding: 0.75rem 0.75rem;
+}
+
+.numericCol {
+  width: 7rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 14rem;
+}
+
+.userName {
+  font-weight: 700;
+}
+
+.empty {
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  color: v.$neutral-70;
+}

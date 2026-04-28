@@ -3,8 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 
 import { db } from "~/lib/firebase";
 import type { Score } from "../types";
+import type { ScoreRes } from "../types/score";
 
-export const useLeaderboard = () => {
+export const useFetchLeaderboard = () => {
   return useQuery({
     queryKey: ["leaderboard"],
     queryFn: async () => {
@@ -15,12 +16,21 @@ export const useLeaderboard = () => {
         limit(20),
       );
 
+      try {
+        await getDocs(q);
+      } catch (error) {
+        console.log(error);
+      }
       const snapshot = await getDocs(q);
+      console.log("Me ejecute");
+      console.log({ snapshot });
 
-      return snapshot.docs.map((doc) => ({
-        // id: doc.id,
-        ...(doc.data() as Score),
-      }));
+      return snapshot.docs.map(
+        (doc): Score => ({
+          id: doc.id,
+          ...(doc.data() as ScoreRes),
+        }),
+      );
     },
   });
 };
