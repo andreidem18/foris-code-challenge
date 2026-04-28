@@ -1,109 +1,149 @@
-# Rick and Morty Memory code challenge
+# Rick and Morty Memory (Code Challenge)
 
-## Getting Started
+A small memory game using the Rick and Morty API, with Firebase auth and a leaderboard.
 
-### Installation
+**Tech stack**
 
-1. Install the dependencies:
+- Runtime & tooling: Node.js, pnpm, Vite
+- App framework: React 19 + React Router 7
+- Language: TypeScript
+- Data fetching: GraphQL (via `graphql-request`) + TanStack React Query
+- Auth & persistence: Firebase Auth + Firestore
+- State: Zustand
+- Forms & validation: React Hook Form + Zod
+- UI: Sass (CSS Modules), Radix Icons, Sonner (toasts), Motion
+- Testing: Vitest + Testing Library
+
+**Technical decisions & reasoning**
+
+- React Router 7: file-based routing and a clean separation between routes and feature modules.
+- TanStack React Query: consistent server-state management (loading/error states, caching, refetching) for both GraphQL and Firestore reads.
+- GraphQL (`graphql-request`) for Rick & Morty: strongly-typed data needs and fewer network roundtrips when fetching multiple entities.
+- Firebase Auth + Firestore: fast to integrate for a code challenge while still representing a realistic auth + persistence stack.
+- Zustand for game state: minimal boilerplate, easy to model game transitions (cards, turns, elapsed time) and share state across hooks/components.
+- React Hook Form + Zod: schema-first validation with good UX and predictable error handling.
+- Sass + CSS Modules: local scoping by default, keeping styles close to components without introducing a full UI framework.
+- Vitest + Testing Library: fast feedback loop and tests focused on observable behavior.
+
+**Tradeoffs**
+
+- Firebase client SDK is initialized at import time. This keeps app code simple, but tests need module mocks (or a dedicated firebase adapter layer).
+- Persisted Zustand store is great for UX, but adds test complexity (localStorage) and requires resets between tests.
+- React Query requires a `QueryClientProvider` in tests. App wiring is straightforward, but unit tests must wrap hooks/components.
+
+**Development approach**
+
+- Feature-first structure under `app/features/*` to keep domain logic (hooks/services/schemas) discoverable.
+- Keep state responsibilities explicit:
+  - “Server state” via React Query.
+  - “Client/game state” via Zustand.
+- Prefer small, testable hooks and utilities (e.g. board setup, matching resolution, timers).
+- Validate and handle errors at the edges (forms/services), map backend errors into user-friendly messages.
+- Automate DX tasks (CSS module typings via `pnpm tsm`) and keep scripts standardized with `pnpm`.
+
+**Requirements**
+
+- Node.js (LTS recommended)
+- pnpm
+
+**Getting started**
+
+1. Install dependencies:
 
 ```bash
 pnpm install
 ```
 
-2. Create .env file and set variables from .env.example
+1. Create a `.env` file based on `.env.example`:
 
-### Development
+```bash
+copy .env.example .env
+```
 
-Start the development server:
+1. Fill in the environment variables:
+
+- `VITE_FIREBASE_API_KEY`: Firebase web API key
+- `VITE_FIREBASE_AUTH_DOMAIN`: Firebase auth domain
+- `VITE_FIREBASE_PROJECT_ID`: Firebase project id
+- `VITE_FIREBASE_APP_ID`: Firebase app id
+- `VITE_RICK_MORTY_GRAPHQL_URL`: Rick & Morty GraphQL endpoint
+
+**Development**
+
+Run the dev server:
 
 ```bash
 pnpm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+App runs at `http://localhost:5173`.
 
-It's also recommended to run parallelly
+Optional (recommended while developing): generate `.scss.d.ts` types for CSS modules:
 
 ```bash
-pnpm run tsm
+pnpm tsm
 ```
 
-This is used to generate scss.d.ts modules to create types and improve
-the developer experience
+**Tests**
 
-## Deployment
-
-#### AWS Infrastructure
-
-- **Amazon S3**:
-  - Stores the static build artifacts
-  - Configured as a private bucket
-
-- **Amazon CloudFront**:
-  - Content Delivery Network (CDN)
-  - Handles HTTPS, caching, and global distribution
-  - Configured with Origin Access Control (OAC) to securely access S3
-
-#### CI/CD
-
-- **GitHub Actions**:
-  - Automates build and deployment
-  - Uses OIDC to securely authenticate with AWS (no static credentials required)
-
-#### 🔄 Deployment Flow
-
-1. A push is made to the `main` branch
-2. GitHub Actions triggers the pipeline:
-   - Installs dependencies
-   - Builds the Angular application
-3. The workflow assumes an AWS role using OIDC
-4. Build artifacts are uploaded to the S3 bucket
-5. CloudFront cache is invalidated
-6. The new version is distributed globally via CloudFront
-
----
-
-## Deployment
-
-## 📁 Folder structure
-
-```
-  app/ # Application-level configuration
-    assets/ # Storaged assets (e.g. images and fonts)
-
-    features/ # Domain-based modules (business logic)
-      auth/
-        components/ # Auth-specifig UI (e.g. LoginForm, RegisterForm)
-        hooks/ # Custom hooks (e.g., useAuth)
-        schemas/ # Zod schemas used for forms
-        services/ # Authentication logic (Firebase integration)
-        utils/ # Helper functions (e.g. Firebase auth error detections)
-
-      game/
-        components/     # Game-specific UI (e.g., MemoryCard, GameBoard)
-        hooks/          # Game logic (e.g., useMemoryGame)
-        mock-data/      # Simulated data used for testing
-        services/       # functions to setup graphql and rick and morty API
-        store/          # zustand setup
-        types/          # Game-related types
-        utils/          # Helper functions (e.g. shuffle functions, format time)
-
-    guards/ # Global guards (e.g., requireSession)
-
-    helpers/ # Shared helper functions
-    helpers/ # Shared helper functions
-
-    components/ # Reusable UI components (shared across features)
-
-    styles/ # Global styling (Sass)
-      \_variables.scss # Design tokens (colors, spacing, etc.)
-      \_mixins.scss # Reusable style logic
-      \_globals.scss # Base styles (reset, typography, body)
-
-    types/ # Global TypeScript types (if needed)
-    utils/ # Shared utilities
+```bash
+pnpm test
 ```
 
-## 🎨 Styling
+Other useful commands:
 
-This app uses Sass and CSS modules to handle styles.
+```bash
+pnpm test:run
+pnpm test:coverage
+pnpm typecheck
+pnpm lint
+pnpm format
+```
+
+**Build & run**
+
+```bash
+pnpm build
+pnpm start
+```
+
+**Project structure**
+
+```
+app/
+  assets/            # Images, fonts, etc.
+  config/            # Runtime env parsing (Zod)
+  features/          # Domain modules
+    auth/
+      components/
+      hooks/
+      schemas/
+      services/
+      utils/
+    game/
+      components/
+      hooks/
+      mock-data/
+      services/
+      store/
+      types/
+      utils/
+    scores/
+      mutations/
+      queries/
+      types/
+  guards/            # Route guards
+  helpers/           # Shared helpers
+  lib/               # Shared integrations (e.g. Firebase client)
+  ui/                # Reusable UI components
+  styles/            # Global Sass
+test/
+  setup.ts           # Vitest setup
+```
+
+**Deployment (AWS)**
+
+- Infrastructure: S3 (static artifacts) + CloudFront (CDN/HTTPS/cache), using Origin Access Control (OAC)
+- CI/CD: GitHub Actions
+- Auth to AWS: OIDC (no long-lived AWS keys)
+- Typical flow: push to `main` -> install -> build -> upload to S3 -> invalidate CloudFront
