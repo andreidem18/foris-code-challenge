@@ -29,9 +29,15 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - Zustand for game state: minimal boilerplate, easy to model game transitions (cards, turns, elapsed time) and share state across hooks/components.  
   Additionally, the `persist` middleware is used to keep the game session even if the user leaves the app.
 
+- Randomized character system: characters are fetched and shuffled dynamically to ensure varied gameplay on each session.  
+  A cooldown mechanism is implemented when requesting new characters to prevent excessive API calls and avoid request spamming.
+
+- AbortSignal usage for game interactions: asynchronous operations (such as delayed card flips) can be cancelled, allowing users to interact immediately without waiting for previous timers to finish.  
+  This improves responsiveness and avoids UI blocking during rapid interactions.
+
 - Radix UI: used for components like popover and avatar to ensure good accessibility out of the box without building primitives from scratch.
 
-- Motion: used to handle cards shuffle animations and improving user experience.
+- Motion: used to handle card flip and shuffle animations, improving user experience with smooth, state-driven transitions.
 
 - React Hook Form + Zod: schema-first validation with good UX and predictable error handling.
 
@@ -73,7 +79,6 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - Introduce a multiplayer mode using WebSockets for real-time gameplay.
 
 - Add a confirmation dialog when the user attempts to exit an active game, to prevent accidental progress loss.
-
 
 ---
 

@@ -75,17 +75,15 @@ export const useMemoryGame = () => {
 
   // Check game end
   useEffect(() => {
+    if (!isGameFinished() || !gameStarted) return;
     const finishGame = async () => {
-      await saveScore();
+      saveScore();
       setGameStarted(false);
       navigate("/game/finish", {
         state: { fromGame: true } satisfies LocationState,
       });
     };
-    if (!cards.length) return;
-    if (isGameFinished()) {
-      finishGame();
-    }
+    finishGame();
   }, [
     cards,
     navigate,
@@ -94,6 +92,7 @@ export const useMemoryGame = () => {
     setGameStarted,
     isGameFinished,
     saveScore,
+    gameStarted,
   ]);
 
   const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({

@@ -29,9 +29,7 @@ export const resolveMatch = (cards: Card[], unflipped: Card[]): Card[] => {
   const cardIds = unflipped.map((card) => card.id);
   // Match
   if (characterIds[0] === characterIds[1]) {
-    return cards.map((c) =>
-      c.characterId === characterIds[0] ? { ...c, status: "matched" } : c,
-    );
+    return cards.filter((c) => c.characterId !== characterIds[0]);
   }
 
   // No match

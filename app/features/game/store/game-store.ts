@@ -58,10 +58,7 @@ export const useGameStore = create<GameState>()(
         setIsRecord: (value) => set({ isRecord: value }),
         isGameFinished: () => {
           const { cards } = get();
-          return (
-            Boolean(cards.length) &&
-            cards.every((card) => card.status === "matched")
-          );
+          return Boolean(cards.length === 0);
         },
         resetGame: () => {
           set({
