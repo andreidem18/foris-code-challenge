@@ -47,5 +47,5 @@ export function useGameTimer() {
         intervalRef.current = null;
       }
     };
-  }, [gameStarted, gameFinished, setElapsedMs]);
+  }, [gameStarted, gameFinished, setElapsedMs, elapsedMs]);
 }
