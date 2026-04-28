@@ -25,8 +25,7 @@ export const useFetchCharacters = () => {
 };
 
 const getRandomIds = () => {
-  // TODO: change this
-  const maxIds = 2;
+  const maxIds = 6;
   const range = { min: 1, max: 826 };
 
   const result: number[] = [];
