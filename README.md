@@ -14,32 +14,71 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - UI: Sass (CSS Modules), Radix Icons, Sonner (toasts), Motion
 - Testing: Vitest + Testing Library
 
-**Technical decisions & reasoning**
+---
+
+## **Technical decisions & reasoning**
 
 - React Router 7: file-based routing and a clean separation between routes and feature modules.
+
 - TanStack React Query: consistent server-state management (loading/error states, caching, refetching) for both GraphQL and Firestore reads.
-- GraphQL (`graphql-request`) for Rick & Morty: strongly-typed data needs and fewer network roundtrips when fetching multiple entities.
+
+- GraphQL (`graphql-request`) for Rick & Morty: avoids overfetching and reduces unnecessary payload size when requesting multiple entities.
+
 - Firebase Auth + Firestore: fast to integrate for a code challenge while still representing a realistic auth + persistence stack.
-- Zustand for game state: minimal boilerplate, easy to model game transitions (cards, turns, elapsed time) and share state across hooks/components.
+
+- Zustand for game state: minimal boilerplate, easy to model game transitions (cards, turns, elapsed time) and share state across hooks/components.  
+  Additionally, the `persist` middleware is used to keep the game session even if the user leaves the app.
+
+- Radix UI: used for components like popover and avatar to ensure good accessibility out of the box without building primitives from scratch.
+
 - React Hook Form + Zod: schema-first validation with good UX and predictable error handling.
+
 - Sass + CSS Modules: local scoping by default, keeping styles close to components without introducing a full UI framework.
+
 - Vitest + Testing Library: fast feedback loop and tests focused on observable behavior.
 
-**Tradeoffs**
+---
 
-- Firebase client SDK is initialized at import time. This keeps app code simple, but tests need module mocks (or a dedicated firebase adapter layer).
-- Persisted Zustand store is great for UX, but adds test complexity (localStorage) and requires resets between tests.
-- React Query requires a `QueryClientProvider` in tests. App wiring is straightforward, but unit tests must wrap hooks/components.
+## **Tradeoffs**
 
-**Development approach**
+- Authentication is validated asynchronously.  
+  This allows the app to load faster without blocking the UI, but introduces a brief moment where an unauthenticated user could see a protected route before being redirected.
+
+- Firebase client SDK is initialized at import time.  
+  This keeps app code simple, but tests need module mocks (or a dedicated firebase adapter layer).
+
+- Persisted Zustand store improves UX, but adds test complexity (localStorage) and requires resets between tests.
+
+- React Query requires a `QueryClientProvider` in tests.  
+  App wiring is straightforward, but unit tests must wrap hooks/components.
+
+---
+
+## **Development approach**
 
 - Feature-first structure under `app/features/*` to keep domain logic (hooks/services/schemas) discoverable.
+
 - Keep state responsibilities explicit:
   - “Server state” via React Query.
   - “Client/game state” via Zustand.
+
 - Prefer small, testable hooks and utilities (e.g. board setup, matching resolution, timers).
+
 - Validate and handle errors at the edges (forms/services), map backend errors into user-friendly messages.
+
 - Automate DX tasks (CSS module typings via `pnpm tsm`) and keep scripts standardized with `pnpm`.
+
+---
+
+## **Opportunities for improvement**
+
+- Add caching for profile images to prevent occasional `429` responses.
+
+- Implement lazy loading / infinite scroll in the leaderboard table (not included due to time constraints).
+
+- Introduce a multiplayer mode using WebSockets for real-time gameplay.
+
+---
 
 **Requirements**
 
