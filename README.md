@@ -4,15 +4,17 @@
 
 ### Installation
 
-Install the dependencies:
+1. Install the dependencies:
 
 ```bash
 pnpm install
 ```
 
+2. Create .env file and set variables from .env.example
+
 ### Development
 
-Start the development server with HMR:
+Start the development server:
 
 ```bash
 pnpm run dev
@@ -29,13 +31,37 @@ pnpm run tsm
 This is used to generate scss.d.ts modules to create types and improve
 the developer experience
 
-## Building for Production
+## Deployment
 
-Create a production build:
+#### AWS Infrastructure
 
-```bash
-pnpm run build
-```
+- **Amazon S3**:
+  - Stores the static build artifacts
+  - Configured as a private bucket
+
+- **Amazon CloudFront**:
+  - Content Delivery Network (CDN)
+  - Handles HTTPS, caching, and global distribution
+  - Configured with Origin Access Control (OAC) to securely access S3
+
+#### CI/CD
+
+- **GitHub Actions**:
+  - Automates build and deployment
+  - Uses OIDC to securely authenticate with AWS (no static credentials required)
+
+#### 🔄 Deployment Flow
+
+1. A push is made to the `main` branch
+2. GitHub Actions triggers the pipeline:
+   - Installs dependencies
+   - Builds the Angular application
+3. The workflow assumes an AWS role using OIDC
+4. Build artifacts are uploaded to the S3 bucket
+5. CloudFront cache is invalidated
+6. The new version is distributed globally via CloudFront
+
+---
 
 ## Deployment
 
@@ -43,51 +69,39 @@ pnpm run build
 
 ```
   app/ # Application-level configuration
-  router/ # Routing configuration and route guards
-  providers/ # Global providers (e.g., AuthProvider)
+    assets/ # Storaged assets (e.g. images and fonts)
 
-  features/ # Domain-based modules (business logic)
-    auth/
-      services/ # Authentication logic (Firebase integration)
-      hooks/ # Custom hooks (e.g., useAuth)
-      types.ts # Auth-related types
+    features/ # Domain-based modules (business logic)
+      auth/
+        components/ # Auth-specifig UI (e.g. LoginForm, RegisterForm)
+        hooks/ # Custom hooks (e.g., useAuth)
+        schemas/ # Zod schemas used for forms
+        services/ # Authentication logic (Firebase integration)
+        utils/ # Helper functions (e.g. Firebase auth error detections)
 
-    game/
-      components/     # Game-specific UI (e.g., MemoryCard, GameBoard)
-      hooks/          # Game logic (e.g., useMemoryGame)
-      utils/          # Helper functions (e.g., shuffle logic)
-      types.ts        # Game-related types
+      game/
+        components/     # Game-specific UI (e.g., MemoryCard, GameBoard)
+        hooks/          # Game logic (e.g., useMemoryGame)
+        mock-data/      # Simulated data used for testing
+        services/       # functions to setup graphql and rick and morty API
+        store/          # zustand setup
+        types/          # Game-related types
+        utils/          # Helper functions (e.g. shuffle functions, format time)
 
-  pages/ # Route-level components (views)
-    Login/
-    Game/
+    guards/ # Global guards (e.g., requireSession)
 
-  components/ # Reusable UI components (shared across features)
-    Button/
-    Input/
-    Spinner/
+    helpers/ # Shared helper functions
+    helpers/ # Shared helper functions
 
-  styles/ # Global styling (Sass)
-    \_variables.scss # Design tokens (colors, spacing, etc.)
-    \_mixins.scss # Reusable style logic
-    \_globals.scss # Base styles (reset, typography, body)
+    components/ # Reusable UI components (shared across features)
 
-  types/ # Global TypeScript types (if needed)
-  utils/ # Shared utilities
-```
+    styles/ # Global styling (Sass)
+      \_variables.scss # Design tokens (colors, spacing, etc.)
+      \_mixins.scss # Reusable style logic
+      \_globals.scss # Base styles (reset, typography, body)
 
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+    types/ # Global TypeScript types (if needed)
+    utils/ # Shared utilities
 ```
 
 ## 🎨 Styling
