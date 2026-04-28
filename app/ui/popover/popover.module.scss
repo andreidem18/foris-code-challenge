@@ -15,12 +15,6 @@
   animation: popover-in 120ms ease-out;
 }
 
-.arrow {
-  fill: v.$white;
-  stroke: v.$blue-1;
-  stroke-width: 2px;
-}
-
 @keyframes popover-in {
   from {
     opacity: 0;
