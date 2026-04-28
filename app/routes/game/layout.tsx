@@ -11,7 +11,9 @@ export default function GameLayout() {
   const { gameStarted } = useGameStore();
   const location = useLocation();
 
-  const showBack = location.pathname === "/game/board" && !gameStarted;
+  const showBack =
+    (location.pathname === "/game/board" && !gameStarted) ||
+    location.pathname === "/game/scores";
 
   return (
     <>
