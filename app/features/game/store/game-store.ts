@@ -14,12 +14,13 @@ interface GameState {
   setGameStarted: (value: boolean) => void;
   setTurns: (value: number | setTurnsCallback) => void;
   resetGame: () => void;
+  isGameFinished: () => boolean;
 }
 
 export const useGameStore = create<GameState>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         cards: [],
         gameStarted: false,
         turns: 0,
@@ -38,6 +39,13 @@ export const useGameStore = create<GameState>()(
             return;
           }
           set(() => ({ turns: value }));
+        },
+        isGameFinished: () => {
+          const { cards } = get();
+          return (
+            Boolean(cards.length) &&
+            cards.every((card) => card.status === "matched")
+          );
         },
         resetGame: () => {
           set({

@@ -4,8 +4,8 @@ import { useRefetchCooldown } from "./use-refetch-cooldown";
 import { sleep } from "~/helpers";
 import { setupBoard, shuffle } from "../utils/game-utils";
 import { useNavigate } from "react-router";
-import type { GameResult } from "../types/game-result";
 import { useGameStore } from "../store/game-store";
+import type { LocationState } from "../types/locationState";
 
 export const useMemoryGame = () => {
   const {
@@ -15,8 +15,15 @@ export const useMemoryGame = () => {
     refetch,
   } = useFetchCharacters();
 
-  const { cards, setCards, gameStarted, setGameStarted, turns, resetGame } =
-    useGameStore();
+  const {
+    cards,
+    setCards,
+    gameStarted,
+    setGameStarted,
+    turns,
+    resetGame,
+    isGameFinished,
+  } = useGameStore();
   const navigate = useNavigate();
 
   const getMatches = () => {
@@ -43,13 +50,13 @@ export const useMemoryGame = () => {
   // Check game end
   useEffect(() => {
     if (!cards.length) return;
-    const isFinished = cards.every((card) => card.status === "matched");
-    if (isFinished) {
+    if (isGameFinished()) {
       setGameStarted(false);
-      navigate("/game/finish", { state: { turns } satisfies GameResult });
-      setCards([]);
+      navigate("/game/finish", {
+        state: { fromGame: true } satisfies LocationState,
+      });
     }
-  }, [cards, navigate, setCards, turns, setGameStarted]);
+  }, [cards, navigate, setCards, turns, setGameStarted, isGameFinished]);
 
   const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({
     refetch,
