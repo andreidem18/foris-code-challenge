@@ -4,6 +4,7 @@
 .gameHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: fit-content;
   width: 100%;
   font-weight: 700;
@@ -38,6 +39,12 @@
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
+}
+
+.turnsAndExit {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 @media (min-width: v.$sm) {

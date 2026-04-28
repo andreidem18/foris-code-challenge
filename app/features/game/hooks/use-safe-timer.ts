@@ -18,7 +18,7 @@ export const useSafeTimer = () => {
     } catch {
       callback();
     } finally {
-      safeTimerRef.current = null;
+      // safeTimerRef.current = null;
     }
   };
 

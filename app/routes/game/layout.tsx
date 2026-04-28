@@ -4,22 +4,17 @@ import { useAuth } from "~/features/auth/hooks/use-auth";
 import { Link, Navigate, Outlet, useLocation } from "react-router";
 
 import styles from "./layout.module.scss";
-import { gameSession } from "~/features/game/utils/game-session";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
+import { useGameStore } from "~/features/game/store/game-store";
 
 export default function GameLayout() {
   // TODO: implement in a specific component to validate session
   const { user, loading } = useAuth();
 
-  const { isStarted } = gameSession;
+  const { gameStarted } = useGameStore();
   const location = useLocation();
 
-  const showBack = location.pathname === "/game/board" && !isStarted();
-  console.log({
-    showBack,
-    "location.pathname": location.pathname,
-    "isStarted()": isStarted(),
-  });
+  const showBack = location.pathname === "/game/board" && !gameStarted;
 
   if (!loading && !user) return <Navigate to="/auth/login" replace />;
   return (

@@ -1,23 +1,20 @@
 import { Button } from "~/ui/button/button";
 import styles from "./finish.module.scss";
-import { Navigate, useLocation, useNavigate } from "react-router";
-import type { GameResult } from "~/features/game/types/game-result";
-import { gameSession } from "~/features/game/utils/game-session";
+import { Navigate, useNavigate } from "react-router";
+import { useGameStore } from "~/features/game/store/game-store";
 
 export default function FinishPage() {
-  const location = useLocation();
-  const state = location.state as GameResult | null;
   const navigate = useNavigate();
-  console.log({ "gameSession.isFinished": gameSession.isFinished() });
+  const { turns } = useGameStore();
 
-  if (!gameSession.isFinished()) return <Navigate to="/game" />;
+  if (turns === null || turns === undefined) return <Navigate to="/game/board" />
 
   return (
     <div className={styles.finishPageContainer}>
       <div className={styles.finishPageContent}>
         <h1 className={styles.title}>¡Felicidades!</h1>
         <div className={styles.description}>
-          Terminaste el juego en {state?.turns} intentos
+          Terminaste el juego en {turns} intentos
         </div>
         <div className={styles.buttons}>
           <Button onClick={() => navigate("/game/board")}>Repetir</Button>
