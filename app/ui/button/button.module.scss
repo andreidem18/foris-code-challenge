@@ -47,6 +47,22 @@
   }
 }
 
+.danger {
+  background: v.$red-1;
+  box-shadow: -0.25rem 0.25rem v.$orange-1;
+  color: v.$white;
+  &:hover {
+    background: v.$red-2;
+  }
+  &:active {
+    background: v.$red-3;
+  }
+  &:disabled {
+    background: v.$blue-1;
+    color: v.$dark-blue-1;
+  }
+}
+
 .outline {
   background: transparent;
   border: solid 0.25rem v.$blue-1;

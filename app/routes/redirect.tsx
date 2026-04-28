@@ -1,5 +1,5 @@
 import { Navigate } from "react-router";
 
 export default function RedirectPage() {
-  return <Navigate to="/auth/login" />;
+  return <Navigate to="/game/menu" />;
 }

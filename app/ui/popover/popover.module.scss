@@ -1,0 +1,33 @@
+@use "~/styles/variables" as v;
+
+.content {
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  min-width: 12rem;
+  background: v.$white;
+  color: v.$neutral-90;
+  border: 0.125rem solid v.$blue-1;
+  box-shadow: -0.25rem 0.25rem v.$yellow-1;
+  outline: none;
+  z-index: 50;
+
+  transform-origin: var(--radix-popover-content-transform-origin);
+  animation: popover-in 120ms ease-out;
+}
+
+.arrow {
+  fill: v.$white;
+  stroke: v.$blue-1;
+  stroke-width: 2px;
+}
+
+@keyframes popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

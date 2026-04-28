@@ -1,0 +1,13 @@
+.menuContainer {
+  display: flex;
+  justify-content: center;
+  padding-top: 3rem;
+}
+
+.menuContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  max-width: 30rem;
+}

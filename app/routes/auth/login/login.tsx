@@ -21,7 +21,7 @@ export default function LoginPage() {
     try {
       await loginWithGoogle();
       toast.success("Login exitoso");
-      navigate("/game");
+      navigate("/game/menu");
     } catch (error) {
       console.error(error);
       toast.error("No se pudo iniciar sesi\u00f3n con Google");

@@ -17,6 +17,10 @@ export const useFetchCharacters = () => {
     },
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
+
+    // Avoid cache to always fetch new characters
+    gcTime: 0,
+    staleTime: 0,
   });
 };
 

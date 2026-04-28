@@ -1,0 +1,34 @@
+@use "~/styles/variables" as v;
+
+.sessionButton {
+  position: fixed;
+  border-radius: 100%;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  overflow: hidden;
+  line-height: 0;
+  border: 0.25rem solid v.$yellow-1;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.popover {
+  padding: 0;
+}
+
+.logoutButton {
+  height: 100%;
+  width: 100%;
+  height: 3rem;
+  border: none;
+  background: transparent;
+  &:hover {
+    background: v.$white-2;
+  }
+}

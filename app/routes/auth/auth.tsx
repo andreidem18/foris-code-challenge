@@ -1,8 +1,13 @@
 import { logo } from "~/assets/images";
 import styles from "./auth.module.scss";
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
+import { useAuth } from "~/features/auth/hooks/use-auth";
 
 export default function AuthPage() {
+  const { user } = useAuth();
+
+  if (user) return <Navigate to="/game/menu" />;
+
   return (
     <div className={styles.loginLayout}>
       <div className={styles.loginContainer}>

@@ -8,19 +8,22 @@ import { useMemoryGame } from "../../hooks/use-memory-game";
 
 import styles from "./memory-game.module.scss";
 import { CardGridSkeleton } from "../card-grid-skeleton/card-grid-skeleton";
+import { useFlipCard } from "../../hooks/use-flip-card";
 
 export const MemoryGame = () => {
   const {
+    exitGame,
     isRefetchBlocked,
     isFetching,
     handleReloadGame,
     cards,
     startGame,
     gameStarted,
-    flipCard,
     getMatches,
     turns,
   } = useMemoryGame();
+
+  const { flipCard } = useFlipCard();
 
   return (
     <>
@@ -28,7 +31,12 @@ export const MemoryGame = () => {
         {gameStarted ? (
           <>
             <div>Aciertos: {getMatches()}</div>
-            <div>Turnos: {turns}</div>
+            <div className={styles.turnsAndExit}>
+              <div>Turnos: {turns}</div>
+              <Button onClick={exitGame} variant="danger">
+                Salir
+              </Button>
+            </div>
           </>
         ) : (
           <>
