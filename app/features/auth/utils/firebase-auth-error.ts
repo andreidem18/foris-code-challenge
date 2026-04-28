@@ -5,7 +5,7 @@ type MappedFormError<Field extends string> = {
   message: string;
 };
 
-const DEFAULT_MESSAGE = "Ocurri\u00f3 un error. Intenta de nuevo.";
+const DEFAULT_MESSAGE = "Ocurrió un error. Intenta de nuevo.";
 
 export function mapLoginAuthError(
   error: unknown,
@@ -62,7 +62,7 @@ export function mapRegisterAuthError(
     case "auth/network-request-failed":
       return {
         field: "root",
-        message: "Error de red. Revisa tu conexi\u00f3n e intenta de nuevo",
+        message: "Error de red. Revisa tu conexión e intenta de nuevo",
       };
     default:
       return { field: "root", message: DEFAULT_MESSAGE };

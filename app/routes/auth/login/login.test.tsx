@@ -4,6 +4,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LoginPage from "./login";
 
+import { meta } from "./login";
+
 const signInWithEmailAndPasswordMock = vi.fn();
 const signInWithPopupMock = vi.fn();
 const toastSuccessMock = vi.fn();
@@ -38,12 +40,33 @@ vi.mock("sonner", () => ({
   Toaster: () => null,
 }));
 
+const mockNavigate = vi.fn();
+
+vi.mock("react-router", async () => {
+  const actual = (await vi.importActual("react-router")) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 describe("Tests login page", () => {
   beforeEach(() => {
     signInWithEmailAndPasswordMock.mockReset();
     signInWithPopupMock.mockReset();
     toastSuccessMock.mockReset();
     toastErrorMock.mockReset();
+    mockNavigate.mockReset();
+  });
+
+  it("Exports meta tags", () => {
+    expect(meta()).toEqual([
+      { title: "Login" },
+      { name: "description", content: "Login to Rick and Morty Memory App" },
+    ]);
   });
 
   it("Renders login page", () => {
@@ -85,6 +108,7 @@ describe("Tests login page", () => {
     });
 
     expect(toastSuccessMock).toHaveBeenCalledWith("Login exitoso");
+    expect(mockNavigate).toHaveBeenCalledWith("/game/menu");
   });
 
   it("Shows validation errors when submitting empty form", async () => {
@@ -109,6 +133,9 @@ describe("Tests login page", () => {
 
   it("Logs in with Google and shows error toast on failure", async () => {
     const user = userEvent.setup();
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
     signInWithPopupMock.mockRejectedValueOnce(new Error("popup failed"));
 
     render(
@@ -121,8 +148,30 @@ describe("Tests login page", () => {
 
     await waitFor(() => {
       expect(toastErrorMock).toHaveBeenCalledWith(
-        "No se pudo iniciar sesi\u00f3n con Google",
+        "No se pudo iniciar sesión con Google",
       );
     });
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("Logs in with Google and navigates on success", async () => {
+    const user = userEvent.setup();
+    signInWithPopupMock.mockResolvedValueOnce({ user: { uid: "1" } });
+
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>,
+    );
+
+    await user.click(screen.getByRole("button", { name: /Login con google/i }));
+
+    await waitFor(() => {
+      expect(signInWithPopupMock).toHaveBeenCalled();
+    });
+
+    expect(toastSuccessMock).toHaveBeenCalledWith("Login exitoso");
+    expect(mockNavigate).toHaveBeenCalledWith("/game/menu");
   });
 });
