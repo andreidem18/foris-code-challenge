@@ -5,7 +5,7 @@ import { useSafeTimer } from "./use-safe-timer";
 
 export const useFlipCard = () => {
   const { cards, gameStarted, setCards, setTurns } = useGameStore();
-  const { safeTimer, safeTimerRef } = useSafeTimer();
+  const { safeTimer, safeCancelTimer } = useSafeTimer();
 
   // Only two cards can be face-up at a time.
   // When the 2nd card is flipped, we schedule match resolution after a short delay.
@@ -17,7 +17,7 @@ export const useFlipCard = () => {
     if (!gameStarted || card.status !== "flipped") return;
 
     // Cancel any pending "resolve match" timer (we're changing the board again).
-    safeTimerRef.current?.abort();
+    safeCancelTimer()
 
     const nextCards = cards.map((c): Card => {
       if (c.id === card.id) {

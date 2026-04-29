@@ -15,10 +15,8 @@ import { usePopulateBoard } from "../../hooks/use-populate-board";
 export const MemoryGame = () => {
   const { cards, startGame, gameStarted, getMatches, turns } = useMemoryGame();
 
-  const { exitGame, isRefetchBlocked, /* isFetching, */ handleReloadGame } =
+  const { exitGame, isRefetchBlocked, isFetching, handleReloadGame } =
     usePopulateBoard();
-
-  const isFetching = true;
 
   const { flipCard } = useFlipCard();
 

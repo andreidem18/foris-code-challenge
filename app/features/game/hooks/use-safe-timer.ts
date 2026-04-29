@@ -10,8 +10,12 @@ import { sleep } from "~/helpers";
 export const useSafeTimer = () => {
   const safeTimerRef = useRef<AbortController | null>(null);
 
-  const safeTimer = async (callback: () => void, time: number) => {
+  const safeCancelTimer = () => {
     if (safeTimerRef.current) safeTimerRef.current.abort();
+  }
+
+  const safeTimer = async (callback: () => void, time: number) => {
+    safeCancelTimer();
 
     const controller = new AbortController();
     safeTimerRef.current = controller;
@@ -33,5 +37,5 @@ export const useSafeTimer = () => {
     };
   }, []);
 
-  return { safeTimer, safeTimerRef };
+  return { safeTimer, safeCancelTimer };
 };
