@@ -3,10 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 import { useMemoryGame } from "./use-memory-game";
 import { charactersMockData } from "../mock-data/characters-mock-data";
 import { cardsMockData } from "../mock-data/cards-mock-data";
+import { usePopulateBoard } from "./use-populate-board";
 
 const useFetchCharactersMock = vi.fn();
 
-vi.mock("./use-fetch-characters", () => ({
+vi.mock("../queries/use-fetch-characters", () => ({
   useFetchCharacters: (...args: unknown[]) => useFetchCharactersMock(...args),
 }));
 
@@ -14,12 +15,22 @@ vi.mock("~/features/scores/mutations/use-save-score", () => ({
   useSaveScore: () => ({ mutateAsync: vi.fn() }),
 }));
 
+export const useMemoryGameFacade = () => {
+  const populateBoard = usePopulateBoard();
+  const memoryGame = useMemoryGame();
+
+  return {
+    ...memoryGame,
+    ...populateBoard,
+  };
+};
+
 describe("useMemoryGame", () => {
   it("Should initialize cards", async () => {
     useFetchCharactersMock.mockReturnValue({
       data: charactersMockData,
     });
-    const { result } = renderHook(() => useMemoryGame());
+    const { result } = renderHook(() => useMemoryGameFacade());
 
     await waitFor(() => {
       expect(result.current.cards).toEqual(cardsMockData);
@@ -32,7 +43,7 @@ describe("useMemoryGame", () => {
       data: [],
       refetch: refetchFn,
     });
-    const { result } = renderHook(() => useMemoryGame());
+    const { result } = renderHook(() => useMemoryGameFacade());
 
     await act(async () => {
       await result.current.handleReloadGame();
