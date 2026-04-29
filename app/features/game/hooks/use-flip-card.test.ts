@@ -38,7 +38,7 @@ describe("useFlipCard", () => {
       result.current.startGame();
     });
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       await act(async () => {
         vi.advanceTimersByTime(3000);
       });
@@ -74,7 +74,7 @@ describe("useFlipCard", () => {
       result.current.startGame();
     });
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       await act(async () => {
         vi.advanceTimersByTime(3000);
       });
@@ -110,7 +110,7 @@ describe("useFlipCard", () => {
       result.current.startGame();
     });
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
       await act(async () => {
         vi.advanceTimersByTime(3000);
       });
