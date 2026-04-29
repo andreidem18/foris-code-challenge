@@ -10,7 +10,6 @@ import styles from "./memory-game.module.scss";
 import { CardGridSkeleton } from "../card-grid-skeleton/card-grid-skeleton";
 import { useFlipCard } from "../../hooks/use-flip-card";
 import { GameTimer } from "../game-timer/game-timer";
-import { ConfigPopover } from "../config-popover/config-popover";
 
 export const MemoryGame = () => {
   const {
@@ -57,7 +56,6 @@ export const MemoryGame = () => {
               </Button>
             </div>
             <div className={styles.leftOptions}>
-              <ConfigPopover />
               <Button className={styles.playButton} onClick={startGame}>
                 Jugar
               </Button>

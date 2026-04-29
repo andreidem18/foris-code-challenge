@@ -16,7 +16,11 @@ export const MemoryCard = ({ card, flipCard }: Props) => {
 
   return (
     <button
-      className={clsx(styles.card, isFlipped && styles.flipped)}
+      className={clsx(
+        styles.card,
+        isFlipped && styles.flipped,
+        card.status === "matched" && styles.removeCard,
+      )}
       onClick={() => flipCard(card)}
     >
       <div className={styles.cardInner}>
