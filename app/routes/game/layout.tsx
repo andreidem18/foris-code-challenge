@@ -31,7 +31,9 @@ export default function GameLayout() {
                 alt="Rick and Morty logo"
                 className={styles.logo}
               />
-              <div className={styles.gameTitle}>Juego de memoria</div>
+              <Link className={styles.gameTitle} to="/game/menu">
+                Juego de memoria
+              </Link>
             </div>
           </div>
           <div className={styles.gameContainer}>
