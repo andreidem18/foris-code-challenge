@@ -75,6 +75,21 @@
   width: 100%;
 }
 
+.removeCard {
+  transition: 0.5s;
+
+  .cardInner {
+    box-shadow: 0 0 0.7rem inset rgba(0, 0, 0, 0.2);
+    background: transparent;
+    transition: 0.5s;
+    .cardFront {
+      transition: 0.5s;
+      background: transparent;
+      opacity: 0;
+    }
+  }
+}
+
 @media (min-width: v.$md) {
   .cardFront {
     padding: 1rem;
