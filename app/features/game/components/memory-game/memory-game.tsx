@@ -10,6 +10,7 @@ import styles from "./memory-game.module.scss";
 import { CardGridSkeleton } from "../card-grid-skeleton/card-grid-skeleton";
 import { useFlipCard } from "../../hooks/use-flip-card";
 import { GameTimer } from "../game-timer/game-timer";
+import { ConfigPopover } from "../config-popover/config-popover";
 
 export const MemoryGame = () => {
   const {
@@ -23,6 +24,7 @@ export const MemoryGame = () => {
     getMatches,
     turns,
   } = useMemoryGame();
+  // const isFetching = true;
 
   const { flipCard } = useFlipCard();
 
@@ -54,9 +56,12 @@ export const MemoryGame = () => {
                 {isRefetchBlocked ? <Spinner /> : <ReloadIcon />}
               </Button>
             </div>
-            <Button className={styles.playButton} onClick={startGame}>
-              Jugar
-            </Button>
+            <div className={styles.leftOptions}>
+              <ConfigPopover />
+              <Button className={styles.playButton} onClick={startGame}>
+                Jugar
+              </Button>
+            </div>
           </>
         )}
       </div>

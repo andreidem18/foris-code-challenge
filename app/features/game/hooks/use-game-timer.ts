@@ -4,11 +4,9 @@ import { useGameStore } from "../store/game-store";
 
 const TICK_MS = 1000;
 
-// Keeps `elapsedMs` updated while the game is running.
 export function useGameTimer() {
-  const gameStarted = useGameStore((s) => s.gameStarted);
-  const isGameFinished = useGameStore((s) => s.isGameFinished);
-  const setElapsedMs = useGameStore((s) => s.setElapsedMs);
+  const { gameStarted, isGameFinished, setElapsedMs, elapsedMs } =
+    useGameStore();
   const gameFinished = isGameFinished();
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -26,6 +24,8 @@ export function useGameTimer() {
       return;
     }
 
+    const time = elapsedMs === 0 ? 4000 : 0;
+
     const timeout = setTimeout(() => {
       lastTickRef.current = Date.now();
 
@@ -37,7 +37,7 @@ export function useGameTimer() {
 
         setElapsedMs((prev) => prev + delta);
       }, TICK_MS);
-    }, 1000);
+    }, time);
 
     return () => {
       clearTimeout(timeout);
@@ -47,5 +47,5 @@ export function useGameTimer() {
         intervalRef.current = null;
       }
     };
-  }, [gameStarted, gameFinished, setElapsedMs]);
+  }, [gameStarted, gameFinished, setElapsedMs, elapsedMs]);
 }

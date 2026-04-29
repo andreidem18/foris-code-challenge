@@ -29,7 +29,18 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - Zustand for game state: minimal boilerplate, easy to model game transitions (cards, turns, elapsed time) and share state across hooks/components.  
   Additionally, the `persist` middleware is used to keep the game session even if the user leaves the app.
 
+- Randomized character system: characters are fetched and shuffled dynamically to ensure varied gameplay on each session.  
+  A cooldown mechanism is implemented when requesting new characters to prevent excessive API calls and avoid request spamming.
+
+- AbortSignal usage for game interactions: asynchronous operations (such as delayed card flips) can be cancelled, allowing users to interact immediately without waiting for previous timers to finish.  
+  This improves responsiveness and avoids UI blocking during rapid interactions.
+
+- Responsive design strategy: the card grid adapts to smaller screens by simplifying card content (e.g. hiding secondary text and focusing on images).  
+  This ensures that the board remains fully visible and playable on mobile devices without compromising usability.
+
 - Radix UI: used for components like popover and avatar to ensure good accessibility out of the box without building primitives from scratch.
+
+- Motion: used to handle card flip and shuffle animations, improving user experience with smooth, state-driven transitions.
 
 - React Hook Form + Zod: schema-first validation with good UX and predictable error handling.
 
@@ -43,14 +54,6 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 
 - Authentication is validated asynchronously.  
   This allows the app to load faster without blocking the UI, but introduces a brief moment where an unauthenticated user could see a protected route before being redirected.
-
-- Firebase client SDK is initialized at import time.  
-  This keeps app code simple, but tests need module mocks (or a dedicated firebase adapter layer).
-
-- Persisted Zustand store improves UX, but adds test complexity (localStorage) and requires resets between tests.
-
-- React Query requires a `QueryClientProvider` in tests.  
-  App wiring is straightforward, but unit tests must wrap hooks/components.
 
 ---
 
@@ -77,6 +80,8 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - Implement lazy loading / infinite scroll in the leaderboard table (not included due to time constraints).
 
 - Introduce a multiplayer mode using WebSockets for real-time gameplay.
+
+- Add a confirmation dialog when the user attempts to exit an active game, to prevent accidental progress loss.
 
 ---
 

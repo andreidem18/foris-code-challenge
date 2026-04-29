@@ -9,6 +9,8 @@ import type { LocationState } from "../types/locationState";
 import { useSaveScore } from "~/features/scores/mutations/use-save-score";
 import { useAuth } from "~/features/auth/hooks/use-auth";
 import { toast } from "sonner";
+import { Spinner } from "~/ui";
+import { CheckIcon } from "@radix-ui/react-icons";
 
 export const useMemoryGame = () => {
   const {
@@ -75,17 +77,15 @@ export const useMemoryGame = () => {
 
   // Check game end
   useEffect(() => {
+    if (!isGameFinished() || !gameStarted) return;
     const finishGame = async () => {
-      await saveScore();
+      saveScore();
       setGameStarted(false);
       navigate("/game/finish", {
         state: { fromGame: true } satisfies LocationState,
       });
     };
-    if (!cards.length) return;
-    if (isGameFinished()) {
-      finishGame();
-    }
+    finishGame();
   }, [
     cards,
     navigate,
@@ -94,6 +94,7 @@ export const useMemoryGame = () => {
     setGameStarted,
     isGameFinished,
     saveScore,
+    gameStarted,
   ]);
 
   const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({
@@ -119,9 +120,25 @@ export const useMemoryGame = () => {
   const startGame = async () => {
     setElapsedMs(0);
     setGameStarted(true);
+    const toastId = toast.warning("Prepárate...", {
+      icon: (
+        <Spinner style={{ color: "#8A3324", height: "1rem", width: "1rem" }} />
+      ),
+      position: "top-center",
+    });
     setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
     await sleep(300);
-    shuffleCards();
+    await shuffleCards();
+    setCards((cards) =>
+      cards.map((card) => ({ ...card, status: "unflipped" })),
+    );
+    await sleep(3000);
+    setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
+    toast.success("¡A jugar!", {
+      id: toastId,
+      icon: <CheckIcon />,
+      position: "top-center",
+    });
   };
 
   return {
