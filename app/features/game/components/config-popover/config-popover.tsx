@@ -12,7 +12,7 @@ export const ConfigPopover = () => {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild className={styles.popoverTrigger}>
         <Button variant="outline" className={styles.trigger}>
           <GearIcon />
         </Button>
