@@ -1,24 +1,22 @@
-import { useCallback, useEffect, useRef } from "react";
-import { useFetchCharacters } from "./use-fetch-characters";
-import { useRefetchCooldown } from "./use-refetch-cooldown";
-import { sleep } from "~/helpers";
-import { setupBoard, shuffle } from "../utils/game-utils";
 import { useNavigate } from "react-router";
-import { useGameStore } from "../store/game-store";
-import type { LocationState } from "../types/locationState";
-import { useSaveScore } from "~/features/scores/mutations/use-save-score";
-import { useAuth } from "~/features/auth/hooks/use-auth";
+import { useCallback, useEffect } from "react";
 import { toast } from "sonner";
-import { Spinner } from "~/ui";
 import { CheckIcon } from "@radix-ui/react-icons";
 
+import { sleep } from "~/helpers";
+import { Spinner } from "~/ui";
+import { useAuth } from "~/features/auth/hooks/use-auth";
+import { useSaveScore } from "~/features/scores/mutations/use-save-score";
+
+import { useGameStore } from "../store/game-store";
+import type { LocationState } from "../types/locationState";
+import { shuffle } from "../utils/game-utils";
+
+const SHUFFLE_PASSES = 4;
+const SHUFFLE_STEP_DELAY_MS = 300;
+const PREP_TOAST_MS = 3000;
+
 export const useMemoryGame = () => {
-  const {
-    data: characters,
-    isRefetching,
-    isFetching,
-    refetch,
-  } = useFetchCharacters();
   const { mutateAsync: saveScoreMutation } = useSaveScore();
 
   const {
@@ -27,7 +25,6 @@ export const useMemoryGame = () => {
     gameStarted,
     setGameStarted,
     turns,
-    resetGame,
     isGameFinished,
     setElapsedMs,
     elapsedMs,
@@ -37,25 +34,45 @@ export const useMemoryGame = () => {
 
   const navigate = useNavigate();
 
-  const getMatches = () => {
-    const cardsMatched = cards.filter(
-      (card) => card.status === "matched",
-    ).length;
-    return cardsMatched / 2;
+  const startGame = async () => {
+    // Reset timer and begin the "prep" flow.
+    setElapsedMs(0);
+    setGameStarted(true);
+
+    const toastId = toast.warning("Prepárate...", {
+      icon: (
+        <Spinner style={{ color: "#8A3324", height: "1rem", width: "1rem" }} />
+      ),
+      position: "top-center",
+    });
+
+    // Briefly show all cards so the player gets a quick glance.
+    setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
+    await sleep(SHUFFLE_STEP_DELAY_MS);
+
+    // Shuffle a few times for a simple animation.
+    await shuffleCards();
+
+    // Hide cards until the countdown finishes.
+    setCards((cards) =>
+      cards.map((card) => ({ ...card, status: "unflipped" })),
+    );
+    await sleep(PREP_TOAST_MS);
+
+    // Start playing: cards are now clickable ("flipped" state in this codebase).
+    setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
+    toast.success("¡A jugar!", {
+      id: toastId,
+      icon: <CheckIcon />,
+      position: "top-center",
+    });
   };
 
-  const hasInitialized = useRef(false);
-
-  useEffect(() => {
-    if (characters && !gameStarted && !hasInitialized.current) {
-      setCards(setupBoard(characters));
-      hasInitialized.current = true;
+  const shuffleCards = async () => {
+    for (let i = 0; i < SHUFFLE_PASSES; i++) {
+      setCards((prev) => shuffle(prev));
+      await sleep(SHUFFLE_STEP_DELAY_MS);
     }
-  }, [characters, setCards, gameStarted]);
-
-  const exitGame = () => {
-    resetGame();
-    handleReloadGame();
   };
 
   const saveScore = useCallback(async () => {
@@ -65,6 +82,8 @@ export const useMemoryGame = () => {
       );
       return;
     }
+
+    // `useSaveScore` returns whether this score is a new record.
     const isRecord = await saveScoreMutation({
       time: elapsedMs,
       turns,
@@ -75,8 +94,8 @@ export const useMemoryGame = () => {
     setIsRecord(isRecord);
   }, [elapsedMs, saveScoreMutation, turns, user, setIsRecord]);
 
-  // Check game end
   useEffect(() => {
+    // End of game: persist score and redirect to finish screen.
     if (!isGameFinished() || !gameStarted) return;
     const finishGame = async () => {
       saveScore();
@@ -97,55 +116,13 @@ export const useMemoryGame = () => {
     gameStarted,
   ]);
 
-  const { triggerRefetch, isRefetchBlocked } = useRefetchCooldown({
-    refetch,
-    isRefetching,
-  });
-
-  const handleReloadGame = async () => {
-    const result = await triggerRefetch();
-
-    if (result?.data) {
-      setCards(setupBoard(result.data));
-    }
-  };
-
-  const shuffleCards = async () => {
-    for (let i = 0; i < 4; i++) {
-      setCards((prev) => shuffle(prev));
-      await sleep(300);
-    }
-  };
-
-  const startGame = async () => {
-    setElapsedMs(0);
-    setGameStarted(true);
-    const toastId = toast.warning("Prepárate...", {
-      icon: (
-        <Spinner style={{ color: "#8A3324", height: "1rem", width: "1rem" }} />
-      ),
-      position: "top-center",
-    });
-    setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
-    await sleep(300);
-    await shuffleCards();
-    setCards((cards) =>
-      cards.map((card) => ({ ...card, status: "unflipped" })),
-    );
-    await sleep(3000);
-    setCards((cards) => cards.map((card) => ({ ...card, status: "flipped" })));
-    toast.success("¡A jugar!", {
-      id: toastId,
-      icon: <CheckIcon />,
-      position: "top-center",
-    });
+  const getMatches = () => {
+    // Each match is represented by two cards.
+    const matchedCards = cards.filter((card) => card.status === "matched");
+    return matchedCards.length / 2;
   };
 
   return {
-    exitGame,
-    handleReloadGame,
-    isRefetchBlocked,
-    isFetching,
     cards,
     startGame,
     gameStarted,

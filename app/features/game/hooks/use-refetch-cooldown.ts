@@ -5,6 +5,8 @@ interface Params<T> {
   isRefetching: boolean;
 }
 
+const COOLDOWN_MS = 2000;
+
 export const useRefetchCooldown = <T>({ refetch, isRefetching }: Params<T>) => {
   const [isCooldownActive, setIsCooldownActive] = useState(false);
 
@@ -19,6 +21,8 @@ export const useRefetchCooldown = <T>({ refetch, isRefetching }: Params<T>) => {
   const isRefetchBlocked = isRefetching || isCooldownActive;
 
   const triggerRefetch = async () => {
+    // Prevent spamming the backend: block while refetching and for a short
+    // cooldown window after each attempt.
     if (isRefetchBlocked) return;
 
     setIsCooldownActive(true);
@@ -31,7 +35,7 @@ export const useRefetchCooldown = <T>({ refetch, isRefetching }: Params<T>) => {
       timeoutRef.current = setTimeout(() => {
         setIsCooldownActive(false);
         timeoutRef.current = null;
-      }, 2000);
+      }, COOLDOWN_MS);
     }
   };
 

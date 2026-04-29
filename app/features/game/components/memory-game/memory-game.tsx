@@ -10,20 +10,13 @@ import styles from "./memory-game.module.scss";
 import { CardGridSkeleton } from "../card-grid-skeleton/card-grid-skeleton";
 import { useFlipCard } from "../../hooks/use-flip-card";
 import { GameTimer } from "../game-timer/game-timer";
+import { usePopulateBoard } from "../../hooks/use-populate-board";
 
 export const MemoryGame = () => {
-  const {
-    exitGame,
-    isRefetchBlocked,
-    isFetching,
-    handleReloadGame,
-    cards,
-    startGame,
-    gameStarted,
-    getMatches,
-    turns,
-  } = useMemoryGame();
-  // const isFetching = true;
+  const { cards, startGame, gameStarted, getMatches, turns } = useMemoryGame();
+
+  const { exitGame, isRefetchBlocked, isFetching, handleReloadGame } =
+    usePopulateBoard();
 
   const { flipCard } = useFlipCard();
 

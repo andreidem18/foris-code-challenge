@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useGameStore } from "../store/game-store";
 
 const TICK_MS = 1000;
+const PRE_GAME_COUNTDOWN_MS = 4000;
 
 export function useGameTimer() {
   const { gameStarted, isGameFinished, setElapsedMs, elapsedMs } =
@@ -24,7 +25,9 @@ export function useGameTimer() {
       return;
     }
 
-    const time = elapsedMs === 0 ? 4000 : 0;
+    // The first time the game starts we wait for the "prep" animation to finish
+    // before starting the timer. On resume (elapsedMs > 0) we start immediately.
+    const delayBeforeStartMs = elapsedMs === 0 ? PRE_GAME_COUNTDOWN_MS : 0;
 
     const timeout = setTimeout(() => {
       lastTickRef.current = Date.now();
@@ -37,7 +40,7 @@ export function useGameTimer() {
 
         setElapsedMs((prev) => prev + delta);
       }, TICK_MS);
-    }, time);
+    }, delayBeforeStartMs);
 
     return () => {
       clearTimeout(timeout);

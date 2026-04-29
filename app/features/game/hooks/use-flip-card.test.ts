@@ -5,22 +5,25 @@ import { charactersMockData } from "../mock-data/characters-mock-data";
 import type { Card } from "../types/card";
 import { useFlipCard } from "./use-flip-card";
 import { useMemoryGame } from "./use-memory-game";
+import { usePopulateBoard } from "./use-populate-board";
 
 const useFetchCharactersMock = vi.fn();
 
-vi.mock("./use-fetch-characters", () => ({
+vi.mock("../queries/use-fetch-characters", () => ({
   useFetchCharacters: (...args: unknown[]) => useFetchCharactersMock(...args),
 }));
 
 vi.mock("~/features/scores/mutations/use-save-score", () => ({
-  useSaveScore: () => ({mutateAsync: vi.fn()}),
+  useSaveScore: () => ({ mutateAsync: vi.fn() }),
 }));
 
 export const useMemoryGameFacade = () => {
   const flipCard = useFlipCard();
   const memoryGame = useMemoryGame();
+  const populateBoard = usePopulateBoard();
 
   return {
+    ...populateBoard,
     ...memoryGame,
     ...flipCard,
   };

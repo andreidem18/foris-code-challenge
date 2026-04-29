@@ -9,11 +9,11 @@
   border-radius: 0.4rem;
 }
 
-.characterName {
+.card .characterName {
   display: none;
 }
 
-.characterDescription {
+.card .characterDescription {
   display: none;
 }
 
@@ -24,7 +24,7 @@
 }
 
 @media (min-width: v.$md) {
-  .characterName {
+  .card .characterName {
     font-weight: 700;
     padding: 0.25rem 0;
     display: block;
@@ -32,7 +32,7 @@
     height: 1rem;
   }
 
-  .characterDescription {
+  .card .characterDescription {
     width: 100%;
     max-width: 10rem;
     height: 0.8rem;
