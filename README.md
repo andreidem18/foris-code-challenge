@@ -55,6 +55,10 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - Authentication is validated asynchronously.  
   This allows the app to load faster without blocking the UI, but introduces a brief moment where an unauthenticated user could see a protected route before being redirected.
 
+- `typed-scss-modules` is used to generate TypeScript typings for CSS Modules, improving developer experience and reducing className-related errors.  
+  However, the library currently triggers an npm warning due to a pending update related to Vite compatibility.  
+  This was considered acceptable since it is a development-only dependency and does not affect the production build.
+
 ---
 
 ## **Development approach**
