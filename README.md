@@ -35,6 +35,9 @@ A small memory game using the Rick and Morty API, with Firebase auth and a leade
 - AbortSignal usage for game interactions: asynchronous operations (such as delayed card flips) can be cancelled, allowing users to interact immediately without waiting for previous timers to finish.  
   This improves responsiveness and avoids UI blocking during rapid interactions.
 
+- Responsive design strategy: the card grid adapts to smaller screens by simplifying card content (e.g. hiding secondary text and focusing on images).  
+  This ensures that the board remains fully visible and playable on mobile devices without compromising usability.
+
 - Radix UI: used for components like popover and avatar to ensure good accessibility out of the box without building primitives from scratch.
 
 - Motion: used to handle card flip and shuffle animations, improving user experience with smooth, state-driven transitions.
