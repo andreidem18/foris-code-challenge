@@ -1,3 +1,4 @@
+import { useGameStore } from "../store/game-store";
 import type { Card } from "../types/card";
 import type { Character } from "../types/character";
 
@@ -27,9 +28,15 @@ export const shuffle = (cards: Card[]): Card[] => {
 export const resolveMatch = (cards: Card[], unflipped: Card[]): Card[] => {
   const characterIds = unflipped.map((card) => card.characterId);
   const cardIds = unflipped.map((card) => card.id);
+  const { deleteOnMatch } = useGameStore.getState();
   // Match
   if (characterIds[0] === characterIds[1]) {
-    return cards.filter((c) => c.characterId !== characterIds[0]);
+    if (deleteOnMatch) {
+      return cards.filter((c) => c.characterId !== characterIds[0]);
+    }
+    return cards.map((c) =>
+      c.characterId === characterIds[0] ? { ...c, status: "matched" } : c,
+    );
   }
 
   // No match

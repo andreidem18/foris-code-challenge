@@ -1,0 +1,23 @@
+@use "~/styles/variables" as v;
+@use "~/styles/mixins" as m;
+
+.root {
+  all: unset;
+  background-color: v.$white;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.025rem solid v.$black;
+
+  &:focus {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.indicator {
+  @include m.flex-center;
+  color: v.$dark-blue-1;
+}

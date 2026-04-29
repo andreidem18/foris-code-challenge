@@ -48,6 +48,12 @@
   align-items: center;
 }
 
+.leftOptions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 @media (min-width: v.$sm) {
   .cardList {
     grid-template-columns: repeat(4, 1fr);

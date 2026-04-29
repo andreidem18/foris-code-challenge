@@ -13,8 +13,10 @@ interface GameState {
   turns: number;
   elapsedMs: number;
   isRecord: IsRecord;
+  deleteOnMatch: boolean;
 
   setCards: (value: Card[] | setCardsCallback) => void;
+  setDeleteOnMatch: (value: boolean) => void;
   setGameStarted: (value: boolean) => void;
   setTurns: (value: number | setTurnsCallback) => void;
   setElapsedMs: (value: number | setElapsedMsCallback) => void;
@@ -32,6 +34,7 @@ export const useGameStore = create<GameState>()(
         turns: 0,
         elapsedMs: 0,
         isRecord: { newPersonalRecord: false, newGlobalRecord: false },
+        deleteOnMatch: false,
 
         setCards: (value) => {
           if (typeof value === "function") {
@@ -56,9 +59,14 @@ export const useGameStore = create<GameState>()(
           set(() => ({ elapsedMs: value }));
         },
         setIsRecord: (value) => set({ isRecord: value }),
+        setDeleteOnMatch: (value) => set({ deleteOnMatch: value }),
         isGameFinished: () => {
-          const { cards } = get();
-          return Boolean(cards.length === 0);
+          const { cards, deleteOnMatch } = get();
+          if (deleteOnMatch) return Boolean(cards.length === 0);
+          return (
+            Boolean(cards.length) &&
+            cards.every((card) => card.status === "matched")
+          );
         },
         resetGame: () => {
           set({

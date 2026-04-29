@@ -4,9 +4,9 @@ import { useGameStore } from "../store/game-store";
 
 const TICK_MS = 1000;
 
-// Keeps `elapsedMs` updated while the game is running.
 export function useGameTimer() {
-  const { gameStarted, isGameFinished,setElapsedMs, elapsedMs } = useGameStore();
+  const { gameStarted, isGameFinished, setElapsedMs, elapsedMs } =
+    useGameStore();
   const gameFinished = isGameFinished();
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
