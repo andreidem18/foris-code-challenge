@@ -14,21 +14,19 @@
   overflow: hidden;
 }
 
-.popoverTrigger {
-  .popoverButton {
-    @include m.flex-center;
-    padding: 0 1rem;
-    gap: 0.4rem;
-    height: 100%;
-    width: 100%;
-    height: 3rem;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-weight: 400;
+.popoverButton {
+  @include m.flex-center;
+  padding: 0 1rem;
+  gap: 0.4rem;
+  height: 100%;
+  width: 100%;
+  height: 3rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 400;
 
-    &:hover {
-      background: v.$white-2;
-    }
+  &:hover {
+    background: v.$white-2;
   }
 }
